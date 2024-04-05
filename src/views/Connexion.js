@@ -1,16 +1,17 @@
 import React from 'react';
+import { login } from '../services/LoginService';
 
 class Connexion extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
+      mail: '',
       password: '',
       role: 'client'
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.login = this.login.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   handleChange(event) {
@@ -18,25 +19,37 @@ class Connexion extends React.Component {
     this.setState({ [name]: value });
   }
 
-  login(event) {
+  async submit(event) {
     event.preventDefault();
-    const { email, password, role } = this.state;
-    console.log("Email:", email);
-    console.log("Mot de passe:", password);
-    console.log("Rôle:", role);
+    const { mail, password, role } = this.state;
+
+    try {
+      const response = await login(mail, password, role);
+      
+      if (response.success) {
+        localStorage.setItem('token', response.token);
+        this.props.navigate('/');
+        window.location.reload();
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Une erreur est survenue");
+    }
   }
 
   render() {
     return (
       <div>
         <h1>Connexion</h1>
-        <form onSubmit={this.login}>
+        <form onSubmit={this.submit}>
           <label>
             Email:
             <input
               type="email"
-              name="email"
-              value={this.state.email}
+              name="mail"
+              value={this.state.mail}
               onChange={this.handleChange}
               required
             />
