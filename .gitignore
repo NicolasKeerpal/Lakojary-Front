@@ -1,5 +1,9 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# script for start and stop
+start.bat
+stop.bat
+
 # dependencies
 /node_modules
 /.pnp
