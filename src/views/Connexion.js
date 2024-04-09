@@ -1,5 +1,6 @@
 import React from 'react';
 import { login } from '../services/LoginService';
+import { Link } from 'react-router-dom';
 
 class Connexion extends React.Component {
   constructor(props) {
@@ -34,7 +35,6 @@ class Connexion extends React.Component {
         alert(response.message);
       }
     } catch (error) {
-      console.log(error);
       alert("Une erreur est survenue");
     }
   }
@@ -45,7 +45,7 @@ class Connexion extends React.Component {
         <h1>Connexion</h1>
         <form onSubmit={this.submit}>
           <label>
-            Email:
+            Mail:
             <input
               type="email"
               name="mail"
@@ -79,6 +79,7 @@ class Connexion extends React.Component {
           </label>
           <br />
           <button type="submit">Connexion</button>
+          <p>Vous n'avez pas de compte ? <Link to="/inscription">Créer un compte</Link></p>
         </form>
       </div>
     );

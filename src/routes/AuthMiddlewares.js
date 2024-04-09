@@ -21,11 +21,14 @@ export const authMiddleware = (allowedRoles) => {
     const tokenExpiration = decodedToken.exp;
     const currentTime = Date.now() / 1000;
     if (tokenExpiration < currentTime) {
-      alert('La session a expiré');
+      alert('La session a expiré, veuillez vous reconnecter');
+      localStorage.removeItem('token');
+      window.location.reload();
       return false;
     }
     
   } catch (error) {
+    localStorage.removeItem('token');
     return false;
   }
   return true;

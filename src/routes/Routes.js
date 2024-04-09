@@ -5,6 +5,7 @@ import Connexion from '../views/Connexion';
 import AboutUs from '../views/About-us';
 import OurProducts from '../views/Our-products';
 import Profile from '../views/Profile';
+import SignUp from '../views/Sign-up';
 import { authMiddleware } from './AuthMiddlewares';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
@@ -40,6 +41,11 @@ const AppRoutes = () => {
       <Route path="/connexion" element={
         <NoAuthRoute allowedRoles={['all']} navigate={navigate}>
           <Connexion navigate={navigate}/>
+        </NoAuthRoute>
+      }/>
+      <Route path="/inscription" element={
+        <NoAuthRoute allowedRoles={['all']} navigate={navigate}>
+          <SignUp navigate={navigate}/>
         </NoAuthRoute>
       }/>
       <Route path="/profil" element={

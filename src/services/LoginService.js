@@ -10,7 +10,6 @@ export const login = async (mail, password, role) => {
       password: password,
       role: role
     };
-    console.log(data);
     const response = await axios.post(`${url}/login`, data);
     return response.data; 
   } catch (error) {
@@ -30,7 +29,11 @@ export const refreshToken = async () => {
         userId: decoded.id
       };
 
-      const response = await axios.post(`${url}/login/refresh-token`, data);
+      const response = await axios.post(`${url}/login/refresh-token`, data, {
+        headers: {
+          Authorization: token
+        }
+      });
       return response.data; 
 
     } catch (error) {
