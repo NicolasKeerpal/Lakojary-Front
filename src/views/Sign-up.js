@@ -50,7 +50,6 @@ class SignUp extends React.Component {
   async submit(event) {
     event.preventDefault();
     const { mail, password, firstname, lastname, zipCode, address, town, departmentId } = this.state.formData;
-    console.log(this.state.formData);
     try {
       const response = await addCustomer(mail, password, firstname, lastname, zipCode, address, town, departmentId);
       
