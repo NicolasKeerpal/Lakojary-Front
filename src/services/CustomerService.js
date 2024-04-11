@@ -25,3 +25,21 @@ export const addCustomer = async (mail, password, firstname, lastname, zipCode, 
       return { success: false, message: "Une erreur est survenue" };
   }
 };
+
+export const getCustomers = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    if (token) {
+      const response = await axios.get(`${url}/customers`, {
+        headers: {
+          Authorization: token
+        }
+      });
+      return response.data;
+    }
+    return { success: false, message: "Une erreur est survenue" };
+
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue" };
+  }
+};

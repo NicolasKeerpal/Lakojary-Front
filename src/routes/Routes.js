@@ -6,6 +6,7 @@ import AboutUs from '../views/About-us';
 import OurProducts from '../views/Our-products';
 import Profile from '../views/Profile';
 import SignUp from '../views/Sign-up';
+import CustomersList from '../views/Customers-list';
 import { authMiddleware } from './AuthMiddlewares';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
@@ -51,6 +52,11 @@ const AppRoutes = () => {
       <Route path="/profil" element={
         <AuthRoute allowedRoles={['all']} navigate={navigate}>
           <Profile navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/clients" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+          <CustomersList navigate={navigate}/>
         </AuthRoute>
       }/>
     </Routes>
