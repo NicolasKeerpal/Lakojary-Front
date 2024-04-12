@@ -9,11 +9,13 @@ class CustomersList extends React.Component {
       startIndex: 0,
       pageIndex: 1,
       pageMax: 0,
-      numberDisplayed: 5
+      numberDisplayed: 5,
+      searchQuery: ''
     };
 
     this.onClickNext = this.onClickNext.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
   async componentDidMount() {
@@ -66,19 +68,38 @@ class CustomersList extends React.Component {
     }
   }
 
+  handleSearchChange(event) {
+    const value = event.target.value;
+    this.setState({ 
+      searchQuery: value,
+      startIndex: 0,
+      pageIndex: 1
+    });
+  }
+
   render() {
-    if (this.state.customers.length == 0) {
+    let { customers, searchQuery } = this.state;
+
+    if (searchQuery.trim() !== '') {
+      customers = customers.filter(customer =>
+        customer.customerId.lastname.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    }
+
+    if (customers.length == 0) {
       return (
         <div>
           <h1>Liste des clients</h1>
-          <p>Aucun client</p>
+          Recherche <input type="search" placeholder="Rechercher un nom" value={this.state.searchValue} onChange={this.handleSearchChange}/>
+          <br/><br/>
+          <p>Aucun client trouvé</p>
         </div>
       );
     } else {
-      const { customers, startIndex } = this.state;
-      const displayedCustomers = customers.slice(startIndex, startIndex + this.state.numberDisplayed);
+      const { startIndex, numberDisplayed } = this.state;
+      const displayedCustomers = customers.slice(startIndex, startIndex + numberDisplayed);
       let pageBtn = "";
-      if (this.state.customers.length > this.state.numberDisplayed) {
+      if (customers.length > numberDisplayed) {
         pageBtn = (
           <div>
             <button onClick={this.onClickPrev}>{"<"}</button> 
@@ -91,6 +112,8 @@ class CustomersList extends React.Component {
       return (
         <div>
           <h1>Liste des clients</h1>
+          Recherche <input type="search" placeholder="Rechercher un nom" value={this.state.searchValue} onChange={this.handleSearchChange}/>
+          <br/><br/>
           {pageBtn}
           <table>
             <tr>
