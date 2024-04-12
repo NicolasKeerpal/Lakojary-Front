@@ -32,14 +32,14 @@ class CustomersList extends React.Component {
 
   onClickNext() {
     const index = this.state.startIndex + this.state.numberDisplayed;
-    if (index > this.state.customers.length) {
+    const page = this.state.pageIndex + 1; 
+    if (page > this.state.pageMax) {
       this.setState({ 
         startIndex: 0,
         pageIndex: 1 
       });
     }
     else {
-      const page = this.state.pageIndex + 1;
       this.setState({ 
         startIndex: index,
         pageIndex : page
@@ -48,9 +48,9 @@ class CustomersList extends React.Component {
   }
 
   onClickPrev() {
-    let index = this.state.startIndex - this.state.numberDisplayed
+    let index = this.state.startIndex - this.state.numberDisplayed;
     if (index < 0) {
-      index = this.state.customers.length - Math.floor(this.state.customers.length/this.state.numberDisplayed);
+      index = (this.state.pageMax - 1) * this.state.numberDisplayed;
       let max = this.state.pageMax;
       this.setState({ 
         startIndex: index,
@@ -76,7 +76,7 @@ class CustomersList extends React.Component {
       );
     } else {
       const { customers, startIndex } = this.state;
-      const displayedCustomers = customers.slice(startIndex, startIndex + 10);
+      const displayedCustomers = customers.slice(startIndex, startIndex + this.state.numberDisplayed);
       let pageBtn = "";
       if (this.state.customers.length > this.state.numberDisplayed) {
         pageBtn = (
