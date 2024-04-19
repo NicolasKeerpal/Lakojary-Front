@@ -1,5 +1,6 @@
 import React from 'react';
 import { getCustomers } from '../services/CustomerService';
+import { Link } from 'react-router-dom';
 
 class CustomersList extends React.Component {
   constructor(props) {
@@ -136,7 +137,7 @@ class CustomersList extends React.Component {
                   <td>{String(customer.zipCode).padStart(5, '0')}</td>
                   <td>{customer.address}</td>
                   <td>{customer.town}</td>
-                  <td><button>Modifier</button></td>
+                  <td><Link to={`/clients/${customer.userId}/edit`}><button>Modifier</button></Link></td>
                   <td><button>Supprimer</button></td>
                   <td><button>Ban</button></td>
                 </tr>

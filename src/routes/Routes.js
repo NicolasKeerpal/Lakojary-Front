@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom'; 
+import { Routes, Route, useNavigate, useParams } from 'react-router-dom'; 
 import Home from '../views/Home';
 import Connexion from '../views/Connexion';
 import AboutUs from '../views/About-us';
@@ -7,6 +7,7 @@ import OurProducts from '../views/Our-products';
 import Profile from '../views/Profile';
 import SignUp from '../views/Sign-up';
 import CustomersList from '../views/Customers-list';
+import UpdateCustomer from '../views/Update-customer';
 import { authMiddleware } from './AuthMiddlewares';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
@@ -29,6 +30,12 @@ const NoAuthRoute = ({ allowedRoles, children, navigate }) => {
   }, [allowedRoles, navigate]);
 
   return <>{children}</>;
+};
+
+const WithIdFromUrl = ({ Component, navigate }) => {
+  const { id } = useParams();
+
+  return <Component navigate={navigate} id={id} />;
 };
 
 const AppRoutes = () => {
@@ -59,6 +66,11 @@ const AppRoutes = () => {
           <CustomersList navigate={navigate}/>
         </AuthRoute>
       }/>
+      <Route path="/clients/:id/edit" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+            <WithIdFromUrl Component={UpdateCustomer} navigate={navigate} />
+        </AuthRoute>
+        }/>
     </Routes>
   );
 }
