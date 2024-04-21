@@ -139,7 +139,7 @@ class CustomersList extends React.Component {
                   <td>{customer.town}</td>
                   <td><Link to={`/clients/${customer.userId}/edit`}><button>Modifier</button></Link></td>
                   <td><button>Supprimer</button></td>
-                  <td><button>Ban</button></td>
+                  <td><button>{customer.ban ? 'Déban' : 'Ban'}</button></td>
                 </tr>
               ))}
           </table>
