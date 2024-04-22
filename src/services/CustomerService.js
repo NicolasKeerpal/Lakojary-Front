@@ -108,3 +108,28 @@ export const putCustomer = async (id, mail, password, firstname, lastname, zipCo
       return { success: false, message: "Une erreur est survenue" };
   }
 };
+
+export const putBanCustomer = async (id, ban) => {
+  const token = localStorage.getItem('token');
+  try {
+    if (token) {
+      let data = {
+          ban
+      };
+
+      const response = await axios.put(`${url}/customers/${id}/ban`, data, {
+        headers: {
+          Authorization: token
+        }
+      });
+      console.log(response);
+      return response; 
+    }
+    return { success: false, message: "Une erreur est survenue" };
+  } catch (error) {
+    if (error.response && error.response.data) {
+        return error.response.data;
+      }
+      return { success: false, message: "Une erreur est survenue" };
+  }
+};

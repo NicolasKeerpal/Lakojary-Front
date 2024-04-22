@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCustomers } from '../services/CustomerService';
+import { getCustomers, putBanCustomer } from '../services/CustomerService';
 import { Link } from 'react-router-dom';
 
 class CustomersList extends React.Component {
@@ -78,6 +78,27 @@ class CustomersList extends React.Component {
     });
   }
 
+  async updBan(event, id, ban) {
+    event.preventDefault();
+    try {
+      const response = await putBanCustomer(id, ban);
+      
+      if (response.status == 204) {
+        if (ban) {
+          alert("Ce client a bien été banni !");
+        }
+        else {
+          alert("Ce client a bien été débanni !");
+        }
+        this.props.navigate('/clients');
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert("Une erreur est survenue");
+    }
+  }
+
   render() {
     let { customers, searchQuery } = this.state;
 
@@ -139,7 +160,7 @@ class CustomersList extends React.Component {
                   <td>{customer.town}</td>
                   <td><Link to={`/clients/${customer.userId}/edit`}><button>Modifier</button></Link></td>
                   <td><button>Supprimer</button></td>
-                  <td><button>{customer.ban ? 'Déban' : 'Ban'}</button></td>
+                  <td><button onClick={(event) => this.updBan(event, customer.userId, !customer.customerId.ban)}>{customer.customerId.ban ? 'Déban' : 'Ban'}</button></td>
                 </tr>
               ))}
           </table>
