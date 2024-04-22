@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCustomers, putBanCustomer } from '../services/CustomerService';
+import { getCustomers, putBanCustomer, delCustomer } from '../services/CustomerService';
 import { Link } from 'react-router-dom';
 
 class CustomersList extends React.Component {
@@ -90,7 +90,23 @@ class CustomersList extends React.Component {
         else {
           alert("Ce client a bien été débanni !");
         }
-        this.props.navigate('/clients');
+        window.location.reload();
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert("Une erreur est survenue");
+    }
+  }
+
+  async deleteCustomer(event, id) {
+    event.preventDefault();
+    try {
+      const response = await delCustomer(id);
+      
+      if (response.status == 204) {
+        alert("Ce client a bien été supprimé !");
+        window.location.reload();
       } else {
         alert(response.message);
       }
@@ -159,7 +175,7 @@ class CustomersList extends React.Component {
                   <td>{customer.address}</td>
                   <td>{customer.town}</td>
                   <td><Link to={`/clients/${customer.userId}/edit`}><button>Modifier</button></Link></td>
-                  <td><button>Supprimer</button></td>
+                  <td><button onClick={(event) => this.deleteCustomer(event, customer.userId)}>Supprimer</button></td>
                   <td><button onClick={(event) => this.updBan(event, customer.userId, !customer.customerId.ban)}>{customer.customerId.ban ? 'Déban' : 'Ban'}</button></td>
                 </tr>
               ))}

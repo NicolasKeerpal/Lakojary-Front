@@ -97,7 +97,7 @@ export const putCustomer = async (id, mail, password, firstname, lastname, zipCo
           Authorization: token
         }
       });
-      console.log(response);
+
       return response; 
     }
     return { success: false, message: "Une erreur est survenue" };
@@ -122,7 +122,28 @@ export const putBanCustomer = async (id, ban) => {
           Authorization: token
         }
       });
-      console.log(response);
+
+      return response; 
+    }
+    return { success: false, message: "Une erreur est survenue" };
+  } catch (error) {
+    if (error.response && error.response.data) {
+        return error.response.data;
+      }
+      return { success: false, message: "Une erreur est survenue" };
+  }
+};
+
+export const delCustomer = async (id) => {
+  const token = localStorage.getItem('token');
+  try {
+    if (token) {
+      const response = await axios.delete(`${url}/customers/${id}`, {
+        headers: {
+          Authorization: token
+        }
+      });
+
       return response; 
     }
     return { success: false, message: "Une erreur est survenue" };
