@@ -73,17 +73,17 @@ class Navbar extends React.Component {
         default:
           return (
             <>
-              <li><Link to="/">Accueil</Link></li>
-              <li><Link to="/nos-produits">Nos produits</Link></li>
-              <li><Link to="/qui-sommes-nous">Qui sommes nous ?</Link></li>
-              <li><Link to="/connexion">Connexion</Link></li>
+              <li className="nav-item"><Link to="/">Accueil</Link></li>
+              <li className="nav-item"><Link to="/nos-produits">Nos produits</Link></li>
+              <li className="nav-item"><Link to="/qui-sommes-nous">Qui sommes nous ?</Link></li>
+              <li className="nav-item"><Link to="/connexion">Connexion</Link></li>
             </>
           );
       }
     };
 
     return (
-      <nav>
+      <nav className='nav_container'>
         <ul>
           {getNavbar()}
         </ul>
