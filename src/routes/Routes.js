@@ -10,6 +10,7 @@ import CustomersList from '../views/Customers-list';
 import UpdateCustomer from '../views/Update-customer';
 import { authMiddleware } from './AuthMiddlewares';
 import PopulateDB from '../views/Populate-db';
+import AddProduct from '../views/Add-product';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
   React.useEffect(() => {
@@ -75,6 +76,11 @@ const AppRoutes = () => {
       <Route path="/remplir-bdd" element={
         <AuthRoute allowedRoles={['admin']} navigate={navigate}>
           <PopulateDB />
+        </AuthRoute>
+      }/>
+      <Route path="/nos-produits/ajout" element={
+        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+          <AddProduct />
         </AuthRoute>
       }/>
     </Routes>
