@@ -11,6 +11,9 @@ import UpdateCustomer from '../views/Update-customer';
 import { authMiddleware } from './AuthMiddlewares';
 import PopulateDB from '../views/Populate-db';
 import AddProduct from '../views/Add-product';
+import IngredientsList from '../views/Ingredients-list';
+import UpdateIngredient from '../views/Update-ingredient';
+import AddIngredient from '../views/Add-ingredient';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
   React.useEffect(() => {
@@ -81,6 +84,21 @@ const AppRoutes = () => {
       <Route path="/nos-produits/ajout" element={
         <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
           <AddProduct />
+        </AuthRoute>
+      }/>
+      <Route path="/ingredients" element={
+        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+          <IngredientsList navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/ingredients/:id/edit" element={
+        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+            <WithIdFromUrl Component={UpdateIngredient} navigate={navigate} />
+        </AuthRoute>
+      }/>
+      <Route path="/ingredients/ajout" element={
+        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+          <AddIngredient navigate={navigate}/>
         </AuthRoute>
       }/>
     </Routes>
