@@ -117,6 +117,7 @@ class CustomersList extends React.Component {
 
   render() {
     let { customers, searchQuery } = this.state;
+    let content;
 
     if (searchQuery.trim() !== '') {
       customers = customers.filter(customer =>
@@ -125,11 +126,8 @@ class CustomersList extends React.Component {
     }
 
     if (customers.length == 0) {
-      return (
+      content = (
         <div>
-          <h1>Liste des clients</h1>
-          Recherche <input type="search" placeholder="Rechercher un nom" value={this.state.searchValue} onChange={this.handleSearchChange}/>
-          <br/><br/>
           <p>Aucun client trouvé</p>
         </div>
       );
@@ -147,11 +145,8 @@ class CustomersList extends React.Component {
         );
       }
 
-      return (
+      content = (
         <div>
-          <h1>Liste des clients</h1>
-          Recherche <input type="search" placeholder="Rechercher un nom" value={this.state.searchValue} onChange={this.handleSearchChange}/>
-          <br/><br/>
           {pageBtn}
           <table>
             <tr>
@@ -183,6 +178,15 @@ class CustomersList extends React.Component {
         </div>
       );
     }
+
+    return (
+      <div>
+      <h1>Liste des clients</h1>
+      Recherche <input type="search" placeholder="Rechercher un nom" value={this.state.searchValue} onChange={this.handleSearchChange}/>
+      <br/><br/>
+      {content}
+    </div>
+    );
   }
 }
 
