@@ -1,12 +1,12 @@
 import React from 'react';
-import { getCustomers, putBanCustomer, delCustomer } from '../services/CustomerService';
+import { getEmployees, putBanEmployee, delEmployee } from '../services/EmployeeService';
 import { Link } from 'react-router-dom';
 
-class CustomersList extends React.Component {
+class EmployeesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      customers: [],
+      employees: [],
       startIndex: 0,
       pageIndex: 1,
       pageMax: 0,
@@ -17,15 +17,16 @@ class CustomersList extends React.Component {
     this.onClickNext = this.onClickNext.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.formatDate = this.formatDate.bind(this);
   }
 
   async componentDidMount() {
     try {
-      const customersData = await getCustomers();
+      const employeesData = await getEmployees();
 
-      if (customersData.success) {
-        this.setState({ customers: customersData.data });
-        const max = Math.ceil(this.state.customers.length/this.state.numberDisplayed);
+      if (employeesData.success) {
+        this.setState({ employees: employeesData.data });
+        const max = Math.ceil(this.state.employees.length/this.state.numberDisplayed);
         this.setState({ pageMax : max });
       }
     } catch (error) {
@@ -81,14 +82,14 @@ class CustomersList extends React.Component {
   async updBan(event, id, ban) {
     event.preventDefault();
     try {
-      const response = await putBanCustomer(id, ban);
+      const response = await putBanEmployee(id, ban);
       
       if (response.status == 204) {
         if (ban) {
-          alert("Ce client a bien été banni !");
+          alert("Cet employé a bien été banni !");
         }
         else {
-          alert("Ce client a bien été débanni !");
+          alert("Cet employé a bien été débanni !");
         }
         window.location.reload();
       } else {
@@ -99,13 +100,13 @@ class CustomersList extends React.Component {
     }
   }
 
-  async deleteCustomer(event, id) {
+  async deleteEmployee(event, id) {
     event.preventDefault();
     try {
-      const response = await delCustomer(id);
+      const response = await delEmployee(id);
       
       if (response.status == 204) {
-        alert("Ce client a bien été supprimé !");
+        alert("Cet employé a bien été supprimé !");
         window.location.reload();
       } else {
         alert(response.message);
@@ -113,29 +114,41 @@ class CustomersList extends React.Component {
     } catch (error) {
       alert("Une erreur est survenue");
     }
+  }
+
+  formatDate(dateStr) {
+    const dateObj = new Date(dateStr);
+
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');;
+    const day = String(dateObj.getDate()).padStart(2, '0');
+
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate;
   }
 
   render() {
-    let { customers, searchQuery } = this.state;
+    let { employees, searchQuery } = this.state;
     let content;
 
     if (searchQuery.trim() !== '') {
-      customers = customers.filter(customer =>
-        customer.customerId.lastname.toLowerCase().startsWith(searchQuery.toLowerCase())
+      employees = employees.filter(employee =>
+        employee.employeeId.lastname.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
     }
 
-    if (customers.length == 0) {
+    if (employees.length == 0) {
       content = (
         <div>
-          <p>Aucun client trouvé</p>
+          <p>Aucun employé trouvé</p>
         </div>
       );
     } else {
       const { startIndex, numberDisplayed } = this.state;
-      const displayedCustomers = customers.slice(startIndex, startIndex + numberDisplayed);
+      const displayedEmployees = employees.slice(startIndex, startIndex + numberDisplayed);
       let pageBtn = "";
-      if (customers.length > numberDisplayed) {
+      if (employees.length > numberDisplayed) {
         pageBtn = (
           <div>
             <button onClick={this.onClickPrev}>{"<"}</button> 
@@ -153,25 +166,27 @@ class CustomersList extends React.Component {
               <th>Nom</th>
               <th>Prénom</th>
               <th>Mail</th>
-              <th>CP</th>
-              <th>Adresse</th>
-              <th>Ville</th>
+              <th>Rôle</th>
+              <th>Salaire</th>
+              <th>Fin de contrat</th>
+              <th>Vacances</th>
               <th>Modifier</th>
               <th>Supprimer</th>
               <th>Ban</th>
             </tr>
 
-            {displayedCustomers.map(customer => (
-                <tr key={customer.userId}>
-                  <td>{customer.customerId.lastname}</td>
-                  <td>{customer.customerId.firstname}</td>
-                  <td>{customer.customerId.mail}</td>
-                  <td>{String(customer.zipCode).padStart(5, '0')}</td>
-                  <td>{customer.address}</td>
-                  <td>{customer.town}</td>
-                  <td><Link to={`/clients/${customer.userId}/edit`}><button>Modifier</button></Link></td>
-                  <td><button onClick={(event) => this.deleteCustomer(event, customer.userId)}>Supprimer</button></td>
-                  <td><button onClick={(event) => this.updBan(event, customer.userId, !customer.customerId.ban)}>{customer.customerId.ban ? 'Déban' : 'Ban'}</button></td>
+            {displayedEmployees.map(employee => (
+                <tr key={employee.userId}>
+                  <td>{employee.employeeId.lastname}</td>
+                  <td>{employee.employeeId.firstname}</td>
+                  <td>{employee.employeeId.mail}</td>
+                  <td>{employee.employeeRole.name}</td>
+                  <td>{employee.salary} €</td>
+                  <td>{employee.endContract ? this.formatDate(employee.endContract) : 'indeterminé'}</td>
+                  <td><Link to={`/employes/${employee.userId}/vacances`}><button>Voir</button></Link></td>
+                  <td><Link to={`/employes/${employee.userId}/edit`}><button>Modifier</button></Link></td>
+                  <td><button onClick={(event) => this.deleteEmployee(event, employee.userId)}>Supprimer</button></td>
+                  <td><button onClick={(event) => this.updBan(event, employee.userId, !employee.employeeId.ban)}>{employee.employeeId.ban ? 'Déban' : 'Ban'}</button></td>
                 </tr>
               ))}
           </table>
@@ -181,9 +196,9 @@ class CustomersList extends React.Component {
 
     return (
       <div>
-      <h1>Liste des clients</h1>
+      <h1>Liste des employés</h1>
       Recherche <input type="search" placeholder="Rechercher un nom" value={this.state.searchValue} onChange={this.handleSearchChange}/>
-      <Link to={`/clients/ajout`}><button>Ajouter</button></Link>
+      <Link to={`/employes/ajout`}><button>Ajouter</button></Link>
       <br/><br/>
       {content}
     </div>
@@ -191,4 +206,4 @@ class CustomersList extends React.Component {
   }
 }
 
-export default CustomersList;
+export default EmployeesList;

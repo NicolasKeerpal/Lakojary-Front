@@ -14,6 +14,13 @@ import AddProduct from '../views/Add-product';
 import IngredientsList from '../views/Ingredients-list';
 import UpdateIngredient from '../views/Update-ingredient';
 import AddIngredient from '../views/Add-ingredient';
+import EmployeesList from '../views/Employees-list';
+import UpdateEmployee from '../views/Update-employee';
+import AddEmployee from '../views/Add-employee';
+import AddCustomer from '../views/Add-customer';
+import VacationsList from '../views/Vacations-list';
+import AddVacations from '../views/Add-vacations';
+import UpdateVacations from '../views/Update-vacations';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
   React.useEffect(() => {
@@ -41,6 +48,12 @@ const WithIdFromUrl = ({ Component, navigate }) => {
   const { id } = useParams();
 
   return <Component navigate={navigate} id={id} />;
+};
+
+const WithIdsFromUrl = ({ Component, navigate }) => {
+  const { vacationsId, id } = useParams();
+
+  return <Component navigate={navigate} vacationsId={vacationsId} id={id} />;
 };
 
 const AppRoutes = () => {
@@ -99,6 +112,41 @@ const AppRoutes = () => {
       <Route path="/ingredients/ajout" element={
         <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
           <AddIngredient navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/employes" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+          <EmployeesList navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/employes/ajout" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+          <AddEmployee navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/employes/:id/edit" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+            <WithIdFromUrl Component={UpdateEmployee} navigate={navigate} />
+        </AuthRoute>
+      }/>
+      <Route path="/clients/ajout" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+          <AddCustomer navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/employes/:id/vacances" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+            <WithIdFromUrl Component={VacationsList} navigate={navigate} />
+        </AuthRoute>
+      }/>
+      <Route path="/employes/:id/vacances/ajout" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+            <WithIdFromUrl Component={AddVacations} navigate={navigate} />
+        </AuthRoute>
+      }/>
+      <Route path="/employes/:id/vacances/:vacationsId/edit" element={
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
+            <WithIdsFromUrl Component={UpdateVacations} navigate={navigate} />
         </AuthRoute>
       }/>
     </Routes>
