@@ -11,6 +11,15 @@ export const getFoods = async () => {
   }
 };
 
+export const getFood = async (id) => {
+  try {
+    const response = await axios.get(`${url}/foods/${id}`);
+    return response.data;
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue" };
+  }
+};
+
 export const addFood = async (name, price, description, stock, image, composition) => {
   const token = localStorage.getItem('token');
   try {

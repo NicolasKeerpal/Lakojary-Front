@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class FoodCard extends React.Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class FoodCard extends React.Component {
         <img src={this.state.image} alt="image" />
         <p>{this.props.food.name}</p>
         <p>{this.props.food.price}</p>
+        <Link to={`/nos-produits/${this.props.food.id}`}><button>Voir</button></Link>
       </div>
     );
   }

@@ -21,6 +21,8 @@ import AddCustomer from '../views/Add-customer';
 import VacationsList from '../views/Vacations-list';
 import AddVacations from '../views/Add-vacations';
 import UpdateVacations from '../views/Update-vacations';
+import NotFound from '../views/NotFound';
+import Product from '../views/Product';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
   React.useEffect(() => {
@@ -149,6 +151,11 @@ const AppRoutes = () => {
             <WithIdsFromUrl Component={UpdateVacations} navigate={navigate} />
         </AuthRoute>
       }/>
+      <Route path="/nos-produits/:id" element={
+            <WithIdFromUrl Component={Product} navigate={navigate} />
+      }/>
+
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
