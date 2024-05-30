@@ -34,7 +34,13 @@ class Navbar extends React.Component {
               <li><Link to="/nos-produits">Nos produits</Link></li>
               <li><Link to="/qui-sommes-nous">Qui sommes nous ?</Link></li>
               <li><Link to="/ingredients">Ingrédients</Link></li>
-              <li><Link to="/utilisateurs">Utilisateurs</Link></li>
+              <li>
+                <span>Utilisateurs</span>
+                <ul>
+                  <li><Link to="/clients">Clients</Link></li>
+                  <li><Link to="/employes">Employés</Link></li>
+                </ul>
+              </li>
               <li><Link to="/remplir-bdd">Remplir BDD</Link></li>
               <li><Link to="/profil">Profil</Link></li>
             </>
