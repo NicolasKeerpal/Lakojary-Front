@@ -62,12 +62,44 @@ class Profile extends React.Component {
     }
   
     render() {
-      console.log(this.state);
+      const { firstname, lastname, mail, role } = this.state;
+
       return (
-        <div>
-          <h1>Profil</h1>
-          <button onClick={this.logout}>Déconnexion</button>
-        </div>
+        <div class="flex items-center justify-center mt-[3rem] mb-[3rem]">
+            <div class="bg-[#533619] rounded-lg p-6 w-[30rem]">
+              <h1>Profil</h1>
+              <div class="bg-custom-blue rounded-lg p-4 mb-4">
+                <h1 class="text-2xl text-white">{firstname} {lastname}</h1>
+                <p class="text-white">{role}</p>
+                <div class="mt-4">
+                    <div class="flex space-x-4">
+                        <div class="flex-1">
+                            <p class="text-white font-semibold">First Name</p>
+                            <div class="border-4 border-red bg-transparent text-white p-2 rounded">
+                                <p>{firstname}</p>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-white font-semibold">Last Name</p>
+                            <div class="border-4 border-red bg-transparent text-white p-2 rounded">
+                                <p>{lastname}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex space-x-4 mt-4">
+                        <div class="flex-1">
+                            <p class="text-white font-semibold">Mail</p>
+                            <div class="border-4 border-red bg-transparent text-white p-2 rounded">
+                                <p>{mail}</p>
+                            </div>
+                        </div>
+                    </div>
+
+              <button onClick={this.logout}>Déconnexion</button>
+            </div>        
+          </div>
+          </div>
+          </div>
       );
     }
 }

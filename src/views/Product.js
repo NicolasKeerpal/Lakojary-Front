@@ -1,6 +1,8 @@
 import React from 'react';
-import { getFood } from '../services/FoodService';
+import { getFood, delFood } from '../services/FoodService';
+import { getFoodComposition } from '../services/CompositionService';
 import { jwtDecode } from 'jwt-decode';
+import { Link } from 'react-router-dom';
 
 class Product extends React.Component {
   constructor(props) {
@@ -10,7 +12,8 @@ class Product extends React.Component {
       name: '',
       price: 0,
       description: '',
-      role: null
+      role: null,
+      ingredients: []
     };
   }
 
@@ -27,11 +30,13 @@ class Product extends React.Component {
 
     try {
         const foodData = await getFood(this.props.id);
+        const ingredientsData = await getFoodComposition(this.props.id);
         if (foodData.success) {
             this.setState({ 
                 name: foodData.data.name,
                 price: foodData.data.price,
-                description: foodData.data.description
+                description: foodData.data.description,
+                ingredients: ingredientsData
             });
             try {
                 const response = await fetch(foodData.data.image);
@@ -50,8 +55,24 @@ class Product extends React.Component {
     }
   }
 
+  async deleteFood(event, id) {
+    event.preventDefault();
+    try {
+      const response = await delFood(id);
+      
+      if (response.status == 204) {
+        alert("Ce produit a bien été supprimé !");
+        this.props.navigate('/nos-produits');
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert("Une erreur est survenue");
+    }
+  }
+
   render() {
-    const { image, price, name, description, role} = this.state;
+    const { image, price, name, description, role, ingredients} = this.state;
     let buttons = (
         <div>
             <button>Ajouter au panier</button> <input type='number' min='0'/>
@@ -59,12 +80,30 @@ class Product extends React.Component {
     );
     if (role=="admin"||role=="boulanger") {
         buttons = (
-            <div>
-            <button>Modifier</button> <button>Supprimer</button>
-        </div>
+          <div>
+            <Link to={`/nos-produits/${this.props.id}/edit`}><button>Modifier</button></Link> <button onClick={(event) => this.deleteFood(event, this.props.id)}>Supprimer</button>
+          </div>
         );
     }
 
+    let composition = (
+      <div>
+        <strong>Composition :</strong>
+        <p>Aucun ingrédients</p>
+      </div>
+    );
+    if (ingredients.length!=0) {
+      composition = (
+        <div>
+          <strong>Composition :</strong>
+          <ul>
+            {ingredients.map(ingredient => (
+              <li key={ingredient.id}>{ingredient.name}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
     return (
       <div>
         <table cellPadding={30}>
@@ -72,17 +111,10 @@ class Product extends React.Component {
                 <td><img src={image} alt="image" /></td>
                 <td>
                     <h1>{name}</h1>
-                    <p>Prix : <strong>{price}</strong></p>
+                    <p>Prix : <strong>{price} €</strong></p>
                     <strong><p>Description :</p></strong>
                     <p>{description}</p>
-                    <p>
-                        <strong>Composition :</strong>
-                        <ul>
-                            <li>Élément 1</li>
-                            <li>Élément 2</li>
-                            <li>Élément 3</li>
-                        </ul>
-                    </p>
+                    <p>{composition}</p>
                     {buttons}
                 </td>
             </tr>
