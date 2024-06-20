@@ -24,12 +24,15 @@ class FoodCard extends React.Component {
 
   render() {
     return (
+      <Link to={`/nos-produits/${this.props.food.id}`}>
       <div>
         <img src={this.state.image} alt="image" />
-        <p>{this.props.food.name}</p>
-        <p>{this.props.food.price}</p>
-        <Link to={`/nos-produits/${this.props.food.id}`}><button>Voir</button></Link>
+        <div>
+          <p>{this.props.food.name}</p>
+          <p>{this.props.food.price}</p>
+        </div>
       </div>
+      </Link>
     );
   }
 }
