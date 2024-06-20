@@ -69,11 +69,12 @@ class AddProduct extends React.Component {
       
       if (response.success) {
         alert("Le produit a bien été ajouté !");
-        //this.props.navigate('/nos-produits/${response.data.food.id}');
+        this.props.navigate(`/nos-produits/${response.food.id}`);
       } else {
         alert(response.message);
       }
     } catch (error) {
+      console.log(error);
       alert("Une erreur est survenue");
     }
   }
