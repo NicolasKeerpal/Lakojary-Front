@@ -23,6 +23,7 @@ import AddVacations from '../views/Add-vacations';
 import UpdateVacations from '../views/Update-vacations';
 import NotFound from '../views/NotFound';
 import Product from '../views/Product';
+import UpdateProduct from '../views/Update-product';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
   React.useEffect(() => {
@@ -98,7 +99,7 @@ const AppRoutes = () => {
       }/>
       <Route path="/nos-produits/ajout" element={
         <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
-          <AddProduct />
+          <AddProduct navigate={navigate} />
         </AuthRoute>
       }/>
       <Route path="/ingredients" element={
@@ -152,7 +153,12 @@ const AppRoutes = () => {
         </AuthRoute>
       }/>
       <Route path="/nos-produits/:id" element={
-            <WithIdFromUrl Component={Product} navigate={navigate} />
+          <WithIdFromUrl Component={Product} navigate={navigate} />
+      }/>
+      <Route path="/nos-produits/:id/edit" element={
+        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+          <WithIdFromUrl Component={UpdateProduct} navigate={navigate} />
+        </AuthRoute>
       }/>
 
       <Route path="*" element={<NotFound />} />
