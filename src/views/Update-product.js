@@ -1,19 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { putFood, getFood } from '../services/FoodService';
 import { getIngredients } from '../services/IngredientService';
-import { addFood } from '../services/FoodService';
+import { getFoodComposition } from '../services/CompositionService';
 
-class AddProduct extends React.Component {
+class UpdateProduct extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       ingredients: [],
+      isChangeImageEnabled: false,
+      stock: 0,
       formData: {
           name: '',
           price: '',
-          stock: '',
           description: '',
-          image: null 
+          image: null ,
+          addStock: 0
       },
       composition: [],
       selectedIngredientIndex: 0
@@ -21,18 +24,32 @@ class AddProduct extends React.Component {
 
       this.handleChange = this.handleChange.bind(this);
       this.submit = this.submit.bind(this);
+      this.handleImageChange = this.handleImageChange.bind(this);
+      this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
       this.addComposition = this.addComposition.bind(this);
       this.delComposition = this.delComposition.bind(this);
       this.handleChangeSelectedIngredientIndex = this.handleChangeSelectedIngredientIndex.bind(this);
-      this.handleImageChange = this.handleImageChange.bind(this);
   }
 
   async componentDidMount() {
     try {
+        const foodData = await getFood(this.props.id);
         const ingredientsData = await getIngredients();
-        if (ingredientsData.success) {
+        const compositionData = await getFoodComposition(this.props.id);
+        if (foodData.success&&ingredientsData.success) {
+          const food = foodData.data;
           const ingredients = ingredientsData.data;
-          this.setState({ ingredients: ingredients });
+          const composition = compositionData;
+          this.setState({ 
+            stock: food.stock,
+            ingredients: ingredients,
+            composition: composition,
+            formData: { 
+                name: food.name,
+                price: food.price,
+                description: food.description,
+            }
+        });
         } else {
           alert('Une erreur est survenue');
         }
@@ -51,32 +68,16 @@ class AddProduct extends React.Component {
     }));
   }
 
+  handleCheckboxChange(event) {
+    const { checked } = event.target;
+    this.setState({
+      isChangeImageEnabled: checked,
+    });
+  }
+
   handleChangeSelectedIngredientIndex(event) {
     const { value } = event.target;
     this.setState({ selectedIngredientIndex: value });
-  }
-
-  async submit(event) {
-    event.preventDefault();
-    const { name, price, stock, description, image } = this.state.formData;
-    const { composition } = this.state;
-    try {
-      if (composition.length==0) {
-        alert("Vous devez ajouter au moins un ingrédient dans la composition");
-        return;
-      }
-      const response = await addFood(name, price, description, stock, image, composition);
-      
-      if (response.success) {
-        alert("Le produit a bien été ajouté !");
-        this.props.navigate(`/nos-produits/${response.food.id}`);
-      } else {
-        alert(response.message);
-      }
-    } catch (error) {
-      console.log(error);
-      alert("Une erreur est survenue");
-    }
   }
 
   addComposition() {
@@ -100,6 +101,24 @@ class AddProduct extends React.Component {
     this.setState({
       composition
     });
+  }
+
+  async submit(event) {
+    event.preventDefault();
+    const { composition } = this.state;
+    const { name, price, addStock, description, image } = this.state.formData;
+    try {
+      const response = await putFood(this.props.id, name, price, description, addStock, image, composition);
+      
+      if (response.status == 204) {
+        alert("Le produit a bien été modifié !");
+        this.props.navigate(`/nos-produits/${this.props.id}`);
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert("Une erreur est survenue");
+    }
   }
 
   handleImageChange(event) {
@@ -131,7 +150,7 @@ class AddProduct extends React.Component {
     return (
       <div>
         <form onSubmit={this.submit}>
-        <h1>Ajouter un produit</h1>
+        <h1>Modification d'un produit</h1>
         <label>
             Nom:
             <input
@@ -144,7 +163,12 @@ class AddProduct extends React.Component {
           </label>
           <br />
           <label>
-          Image:
+          <input
+              type="checkbox"
+              checked={this.state.isChangeImageEnabled}
+              onChange={this.handleCheckboxChange}
+          />
+          Changer l'image:
           <input
             type="file"
             name="image"
@@ -152,14 +176,16 @@ class AddProduct extends React.Component {
             required
             accept=".png"
             multiple={false}
+            disabled={!this.state.isChangeImageEnabled}
           />
         </label>
         <br />
         <label>
           Prix:
           <input
-            type="number"
-            name="price"
+            type="text" 
+            pattern="[0-9]*[.,]?[0-9]+" 
+            placeholder="Entrez un nombre décimal positif"
             value={this.state.formData.price}
             onChange={this.handleChange}
             required
@@ -167,12 +193,17 @@ class AddProduct extends React.Component {
         </label>
         <br />
         <label>
-          Stock:
+          Stock à ajouter (stock actuel : {this.state.stock}):
+          <br/>
+          (Il faut qu'il y est assez de stock d'ingrédients pour pouvoir ajouter des stocks à ce produit)
+          <br/>
+          Ajout :
           <input
             type="number"
-            name="stock"
-            value={this.state.formData.stock}
+            name="addStock"
+            value={this.state.formData.addStock}
             onChange={this.handleChange}
+            min="0"
             required
           />
         </label>
@@ -208,12 +239,12 @@ class AddProduct extends React.Component {
         <br />
           {compositionContent}
         <br />
-          <button type="submit">Créer</button>
-          <Link to="/nos-produits"><button>Retour</button></Link>
+          <button type="submit">Modifier</button>
+          <Link to={`/nos-produits/${this.props.id}`}><button>Retour</button></Link>
         </form>
       </div>
     );
   }
 }
 
-export default AddProduct;
+export default UpdateProduct;
