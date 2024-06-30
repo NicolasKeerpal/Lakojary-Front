@@ -1,7 +1,9 @@
 import React from 'react';
 import { getCustomer } from '../services/CustomerService';
 import { getEmployee } from '../services/EmployeeService';
+import { getDepartments } from '../services/DepartmentService';
 import { jwtDecode } from 'jwt-decode';
+import { Link } from 'react-router-dom';
 
 class Profile extends React.Component {
     constructor(props) {
@@ -10,6 +12,13 @@ class Profile extends React.Component {
           firstname: '',
           lastname: '',
           mail: '',
+          zipCode: '',
+          town: '',
+          address: '',
+          endContract: '',
+          salary: '',
+          departmentId: '',
+          departments: [],
           role: null
         };
         this.logout = this.logout.bind(this);
@@ -29,30 +38,73 @@ class Profile extends React.Component {
       }
   
       try {
-          let userData, firstname, lastname, mail;
-          if (decoded.role=='client') {
-            userData = await getCustomer(decoded.id);
+          let userData, firstname, lastname, mail, address, town, zipCode, salary, endContract, departmentId;
+          if (decoded.role == 'client') {
+            /*userData = await getCustomer(decoded.id);
             firstname = userData.data.customerId.firstname;
             lastname = userData.data.customerId.lastname;
             mail = userData.data.customerId.mail;
+            address = userData.data.address;
+            town = userData.data.town;
+            zipCode = userData.data.zipCode;*/
+            userData = true;
+            firstname = "firstname";
+            lastname = "lastname";
+            mail = "customerId.mail";
+            address = "address";
+            town = "userData.data.town";
+            zipCode = "zipCode";
           } else {
+            try {
+              const departmentsData = await getDepartments();
+              if (departmentsData.success) {
+                this.setState({ departments: departmentsData.data });
+              } else {
+                alert('Une erreur est survenue');
+              }
+            } catch (error) {
+              alert('Une erreur est survenue');
+            }
+
             userData = await getEmployee(decoded.id);
             firstname = userData.data.employeeId.firstname;
             lastname = userData.data.employeeId.lastname;
             mail = userData.data.employeeId.mail;
+            salary = userData.data.salary;
+            endContract = userData.data.endConract;
+            departmentId = userData.data.departmentId;
           }
           
           if (userData.success) {
               this.setState({ 
                   firstname,
                   lastname,
-                  mail
+                  mail,
+                  salary,
+                  endContract,
+                  address,
+                  town,
+                  zipCode,
+                  departmentId,
               });
           }
       } catch(error) {
+          console.log(error);
           alert("Une erreur est survenue");
-          this.props.navigate('/home');
+          this.props.navigate('/');
       }
+    }
+
+    formatDate(dateStr) {
+      const dateObj = new Date(dateStr);
+  
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');;
+      const day = String(dateObj.getDate()).padStart(2, '0');
+  
+      const formattedDate = `${day}/${month}/${year}`;
+  
+      return formattedDate;
     }
 
     logout = () => {
@@ -62,40 +114,108 @@ class Profile extends React.Component {
     }
   
     render() {
-      const { firstname, lastname, mail, role } = this.state;
+      const { firstname, lastname, mail, role, endContract, salary, town, address, zipCode, departments, departmentId } = this.state;
+      let roleContent = "Client";
+      let infoContent = ( <div>
+        <div>
+            <div>
+                <p>Mail</p>
+                <div>
+                    <p>{mail}</p>
+                </div>
+            </div>
+            <div>
+                <p>Adresse</p>
+                <div>
+                    <p>{address}</p>
+                </div>
+            </div>
+        </div>
+        <div>
+          <div>
+              <p>Code postal</p>
+              <div>
+                  <p>{zipCode}</p>
+              </div>
+          </div>
+          <div>
+              <p>Ville</p>
+              <div>
+                  <p>{town}</p>
+              </div>
+          </div>
+      </div>
+      </div> );
+      let buttons = ( <div>
+              <button to={'/profil/edit'}>Modifier</button>
+              <button>Supprimer</button>
+              <button onClick={this.logout}>Déconnexion</button>
+      </div>);
+
+      if (role!="client") {
+        let department = departments[departmentId-1];
+        roleContent = "Employé - " + role;
+        infoContent = ( <div>
+          <div>
+              <div>
+                  <p>Mail</p>
+                  <div>
+                      <p>{mail}</p>
+                  </div>
+              </div>
+              <div>
+                  <p>Département</p>
+                  <div>
+                      <p>{departmentId} - {department ? department.name : 'Error'}</p>
+                  </div>
+              </div>
+          </div>
+          <div>
+            <div>
+                <p>Fin de contrat</p>
+                <div>
+                    <p>{endContract ? this.formatDate(endContract) : 'Indeterminé'}</p>
+                </div>
+            </div>
+            <div>
+                <p>Salaire</p>
+                <div>
+                    <p>{salary} €</p>
+                </div>
+            </div>
+        </div>
+        </div> );
+        buttons = ( <div>
+          <Link to={'/profil/edit'}><button>Modifier</button></Link>
+          <button onClick={this.logout}>Déconnexion</button>
+        </div>);
+      }
 
       return (
-        <div class="flex items-center justify-center mt-[3rem] mb-[3rem]">
-            <div class="bg-[#533619] rounded-lg p-6 w-[30rem]">
+        <div>
+            <div>
               <h1>Profil</h1>
-              <div class="bg-custom-blue rounded-lg p-4 mb-4">
-                <h1 class="text-2xl text-white">{firstname} {lastname}</h1>
-                <p class="text-white">{role}</p>
-                <div class="mt-4">
-                    <div class="flex space-x-4">
-                        <div class="flex-1">
-                            <p class="text-white font-semibold">First Name</p>
-                            <div class="border-4 border-red bg-transparent text-white p-2 rounded">
+              <div>
+                <h1>{firstname} {lastname}</h1>
+                <p>{roleContent}</p>
+                <div>
+                    <div>
+                        <div>
+                            <p>First Name</p>
+                            <div>
                                 <p>{firstname}</p>
                             </div>
                         </div>
-                        <div class="flex-1">
-                            <p class="text-white font-semibold">Last Name</p>
-                            <div class="border-4 border-red bg-transparent text-white p-2 rounded">
+                        <div>
+                            <p>Last Name</p>
+                            <div>
                                 <p>{lastname}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="flex space-x-4 mt-4">
-                        <div class="flex-1">
-                            <p class="text-white font-semibold">Mail</p>
-                            <div class="border-4 border-red bg-transparent text-white p-2 rounded">
-                                <p>{mail}</p>
-                            </div>
-                        </div>
-                    </div>
+                    {infoContent}
 
-              <button onClick={this.logout}>Déconnexion</button>
+                {buttons}
             </div>        
           </div>
           </div>

@@ -5,6 +5,7 @@ import Connexion from '../views/Connexion';
 import AboutUs from '../views/About-us';
 import OurProducts from '../views/Our-products';
 import Profile from '../views/Profile';
+import UpdateProfile from '../views/Update-profile';
 import SignUp from '../views/Sign-up';
 import CustomersList from '../views/Customers-list';
 import UpdateCustomer from '../views/Update-customer';
@@ -80,6 +81,11 @@ const AppRoutes = () => {
       <Route path="/profil" element={
         <AuthRoute allowedRoles={['all']} navigate={navigate}>
           <Profile navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/profil/edit" element={
+        <AuthRoute allowedRoles={['all']} navigate={navigate}>
+          <UpdateProfile navigate={navigate}/>
         </AuthRoute>
       }/>
       <Route path="/clients" element={
