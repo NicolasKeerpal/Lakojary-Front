@@ -51,7 +51,7 @@ class Navbar extends React.Component {
               <li><Link to="/">Accueil</Link></li>
               <li><Link to="/nos-produits">Nos produits</Link></li>
               <li><Link to="/qui-sommes-nous">Qui sommes nous ?</Link></li>
-              <li><Link to="/livraisons">Livraisons</Link></li>
+              <li><Link to="/mes-livraisons">Livraisons</Link></li>
               <li><Link to="/profil">Profil</Link></li>
             </>
           );
@@ -61,8 +61,8 @@ class Navbar extends React.Component {
               <li><Link to="/">Accueil</Link></li>
               <li><Link to="/nos-produits">Nos produits</Link></li>
               <li><Link to="/qui-sommes-nous">Qui sommes nous ?</Link></li>
-              <li><Link to="/commandes">Commandes</Link></li>
-              <li><Link to="/panier">Panier</Link></li>
+              <li><Link to="/mes-commandes">Commandes</Link></li>
+              <li><Link to="/mon-panier">Panier</Link></li>
               <li><Link to="/profil">Profil</Link></li>
             </>
           );
