@@ -24,6 +24,9 @@ import AddVacations from '../views/Add-vacations';
 import UpdateVacations from '../views/Update-vacations';
 import NotFound from '../views/NotFound';
 import Product from '../views/Product';
+import Cart from '../views/Cart';
+import DeliveriesList from '../views/Deliveries-list';
+import OrdersList from '../views/Orders-list';
 import UpdateProduct from '../views/Update-product';
 
 const AuthRoute = ({ allowedRoles, children, navigate }) => {
@@ -164,6 +167,21 @@ const AppRoutes = () => {
       <Route path="/nos-produits/:id/edit" element={
         <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
           <WithIdFromUrl Component={UpdateProduct} navigate={navigate} />
+        </AuthRoute>
+      }/>
+      <Route path="/mon-panier" element={
+        <AuthRoute allowedRoles={['client']} navigate={navigate}>
+          <Cart navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/mes-commandes" element={
+        <AuthRoute allowedRoles={['client']} navigate={navigate}>
+          <OrdersList navigate={navigate}/>
+        </AuthRoute>
+      }/>
+      <Route path="/mes-livraisons" element={
+        <AuthRoute allowedRoles={['livreur']} navigate={navigate}>
+          <DeliveriesList navigate={navigate}/>
         </AuthRoute>
       }/>
 
