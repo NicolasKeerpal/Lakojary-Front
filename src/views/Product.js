@@ -1,6 +1,7 @@
 import React from 'react';
 import { getFood, delFood } from '../services/FoodService';
 import { getFoodComposition } from '../services/CompositionService';
+import { addOrder } from '../services/OrderService';
 import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
 
@@ -13,8 +14,18 @@ class Product extends React.Component {
       price: 0,
       description: '',
       role: null,
-      ingredients: []
+      ingredients: [],
+      qtyToAdd: 0
     };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {
+    const { name, value } = event.target;
+    this.setState({
+      [name]: value
+    });
   }
 
   async componentDidMount() {
@@ -71,11 +82,27 @@ class Product extends React.Component {
     }
   }
 
+  async addOrder(event) {
+    event.preventDefault();
+    const { qtyToAdd } = this.state;
+    try {
+      const response = await addOrder(this.props.id, qtyToAdd);
+      
+      if (response.success) {
+        this.props.navigate('/mon-panier');
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      alert("Une erreur est survenue");
+    }
+  }
+
   render() {
     const { image, price, name, description, role, ingredients} = this.state;
     let buttons = (
         <div>
-            <button>Ajouter au panier</button> <input type='number' min='0'/>
+            <button onClick={(event) => this.addOrder(event)}>Ajouter au panier</button> <input type='number' name="qtyToAdd" value={this.state.qtyToAdd} onChange={this.handleChange} />
         </div>
     );
     if (role=="admin"||role=="boulanger") {
