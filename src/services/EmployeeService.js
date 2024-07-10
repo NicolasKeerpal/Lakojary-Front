@@ -20,6 +20,24 @@ export const getEmployees = async () => {
   }
 };
 
+export const getDeliverymen = async () => {
+  const token = localStorage.getItem('token');
+  try {
+    if (token) {
+      const response = await axios.get(`${url}/employees/deliverymen`, {
+        headers: {
+          Authorization: token
+        }
+      });
+      return response.data;
+    }
+    return { success: false, message: "Une erreur est survenue" };
+
+  } catch (error) {
+    return { success: false, message: "Une erreur est survenue" };
+  }
+};
+
 export const putBanEmployee = async (id, ban) => {
   const token = localStorage.getItem('token');
   try {
