@@ -16,7 +16,7 @@ class PopulateDB extends React.Component {
       this.setState({ loading: true });
       const response = await populateDataBase();
       console.log('rep : ', response);
-      if (response.status == 204) {
+      if (response.status == 201) {
         alert("Base de données rempli avec succès !");
       } else {
         alert(response.message);

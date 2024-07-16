@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCustomer } from '../services/CustomerService';
+import { getCustomer, delCustomer } from '../services/CustomerService';
 import { getEmployee } from '../services/EmployeeService';
 import { getDepartments } from '../services/DepartmentService';
 import { jwtDecode } from 'jwt-decode';
@@ -30,6 +30,7 @@ class Profile extends React.Component {
       if (token) {
         try {
           decoded = jwtDecode(token);
+          console.log(decoded.id);
           this.setState({ role: decoded.role });
         } catch (error) {
           alert("Une erreur est survenue");
@@ -40,20 +41,13 @@ class Profile extends React.Component {
       try {
           let userData, firstname, lastname, mail, address, town, zipCode, salary, endContract, departmentId;
           if (decoded.role == 'client') {
-            /*userData = await getCustomer(decoded.id);
+            userData = await getCustomer(decoded.id);
             firstname = userData.data.customerId.firstname;
             lastname = userData.data.customerId.lastname;
             mail = userData.data.customerId.mail;
             address = userData.data.address;
             town = userData.data.town;
-            zipCode = userData.data.zipCode;*/
-            userData = true;
-            firstname = "firstname";
-            lastname = "lastname";
-            mail = "customerId.mail";
-            address = "address";
-            town = "userData.data.town";
-            zipCode = "zipCode";
+            zipCode = userData.data.zipCode;
           } else {
             try {
               const departmentsData = await getDepartments();
@@ -113,6 +107,35 @@ class Profile extends React.Component {
       window.location.reload();
     }
   
+    async deleteProfile(event) {
+      event.preventDefault();
+      const token = localStorage.getItem('token');
+      let decoded;
+      if (token) {
+        try {
+          decoded = jwtDecode(token);
+          console.log(decoded.id);
+          this.setState({ role: decoded.role });
+        } catch (error) {
+          alert("Une erreur est survenue");
+          this.props.navigate('/home');
+        }
+      }
+
+      try {
+        const response = await delCustomer(decoded.id);
+        
+        if (response.status == 204) {
+          alert("Votre profil a bien été supprimé !");
+          this.logout();
+        } else {
+          alert(response.message);
+        }
+      } catch (error) {
+        alert("Une erreur est survenue");
+      }
+    }
+
     render() {
       const { firstname, lastname, mail, role, endContract, salary, town, address, zipCode, departments, departmentId } = this.state;
       let roleContent = "Client";
@@ -147,8 +170,8 @@ class Profile extends React.Component {
       </div>
       </div> );
       let buttons = ( <div>
-              <button to={'/profil/edit'}>Modifier</button>
-              <button>Supprimer</button>
+              <Link to={'/profil/edit'}><button>Modifier</button></Link>
+              <button onClick={(event) => this.deleteProfile(event)}>Supprimer</button>
               <button onClick={this.logout}>Déconnexion</button>
       </div>);
 
