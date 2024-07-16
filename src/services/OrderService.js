@@ -2,11 +2,11 @@ import axios from 'axios';
 
 const url = 'http://localhost:8000';
 
-export const getEmployees = async () => {
+export const getCart = async () => {
   const token = localStorage.getItem('token');
   try {
     if (token) {
-      const response = await axios.get(`${url}/employees`, {
+      const response = await axios.get(`${url}/orders/cart/all`, {
         headers: {
           Authorization: token
         }
@@ -16,37 +16,52 @@ export const getEmployees = async () => {
     return { success: false, message: "Une erreur est survenue" };
 
   } catch (error) {
+    console.log(error);
     return { success: false, message: "Une erreur est survenue" };
   }
 };
 
-export const getDeliverymen = async () => {
-  const token = localStorage.getItem('token');
-  try {
+export const getPaidOrders = async () => {
+    const token = localStorage.getItem('token');
+    try {
+      if (token) {
+        const response = await axios.get(`${url}/orders/paid/all`, {
+          headers: {
+            Authorization: token
+          }
+        });
+        return response.data;
+      }
+      return { success: false, message: "Une erreur est survenue" };
+  
+    } catch (error) {
+      return { success: false, message: "Une erreur est survenue" };
+    }
+  };
+
+export const getDeliveries = async () => {
+const token = localStorage.getItem('token');
+try {
     if (token) {
-      const response = await axios.get(`${url}/employees/deliverymen`, {
+    const response = await axios.get(`${url}/orders/deliveries/all`, {
         headers: {
-          Authorization: token
+        Authorization: token
         }
-      });
-      return response.data;
+    });
+    return response.data;
     }
     return { success: false, message: "Une erreur est survenue" };
 
-  } catch (error) {
+} catch (error) {
     return { success: false, message: "Une erreur est survenue" };
-  }
+}
 };
 
-export const putBanEmployee = async (id, ban) => {
+export const delOrder = async (id) => {
   const token = localStorage.getItem('token');
   try {
     if (token) {
-      let data = {
-          ban
-      };
-
-      const response = await axios.put(`${url}/employees/${id}/ban`, data, {
+      const response = await axios.delete(`${url}/orders/${id}`, {
         headers: {
           Authorization: token
         }
@@ -63,46 +78,17 @@ export const putBanEmployee = async (id, ban) => {
   }
 };
 
-export const delEmployee = async (id) => {
+export const addOrder = async (foodId, qty) => {
   const token = localStorage.getItem('token');
   try {
     if (token) {
-      const response = await axios.delete(`${url}/employees/${id}`, {
-        headers: {
-          Authorization: token
-        }
-      });
-
-      return response; 
-    }
-    return { success: false, message: "Une erreur est survenue" };
-  } catch (error) {
-    if (error.response && error.response.data) {
-        return error.response.data;
-      }
-      return { success: false, message: "Une erreur est survenue" };
-  }
-};
-
-export const addEmployee = async (mail, password, firstname, lastname, salary, roleId, departmentId, firstDayWeekend, endContract) => {
-  const token = localStorage.getItem('token');
-  try {
-    if (token) {
-      let intDepartmentId = +departmentId;
-      let intRoleId = +roleId;
-      let intSalary = +salary;
+      let intFoodId = +foodId;
+      let intQty = +qty;
       const data = {
-        mail,
-        password,
-        firstname,
-        lastname,
-        role: intRoleId,
-        salary: intSalary,
-        firstDayWeekend,
-        departmentId: intDepartmentId,
-        endContract
+        foodId: intFoodId,
+        qty: intQty
       };
-      const response = await axios.post(`${url}/employees`, data, {
+      const response = await axios.post(`${url}/orders`, data, {
         headers: {
           Authorization: token
         }
@@ -119,55 +105,58 @@ export const addEmployee = async (mail, password, firstname, lastname, salary, r
   }
 };
 
-export const getEmployee = async (id) => {
+export const buyOrder = async (id, hour) => {
   const token = localStorage.getItem('token');
   try {
     if (token) {
-      const response = await axios.get(`${url}/employees/${id}`, {
+      const data = {
+        hour,
+      };
+      const response = await axios.put(`${url}/orders/${id}`, data, {
         headers: {
           Authorization: token
         }
       });
-      return response.data;
+      return response; 
+    } else {
+      return { success: false, message: "Une erreur est survenue" };
     }
-    return { success: false, message: "Une erreur est survenue" };
-
   } catch (error) {
-    return { success: false, message: "Une erreur est survenue" };
+    if (error.response && error.response.data) {
+        return error.response.data;
+      }
+      return { success: false, message: "Une erreur est survenue" };
   }
 };
 
-export const putEmployee = async (id, mail, password, firstname, lastname, salary, departmentId, firstDayWeekend, endContract) => {
+export const finishOrder = async (id) => {
   const token = localStorage.getItem('token');
   try {
     if (token) {
-      let intDepartmentId = +departmentId;
-      let intSalary = +salary;
-      let data;
-      if (password) {
-        data = {
-          mail,
-          password,
-          firstname,
-          lastname,
-          salary: intSalary,
-          firstDayWeekend,
-          departmentId: intDepartmentId,
-          endContract
-        };
-      } else {
-        data = {
-          mail,
-          firstname,
-          lastname,
-          salary: intSalary,
-          firstDayWeekend,
-          departmentId: intDepartmentId,
-          endContract
-        };
+      const data = {};
+      const response = await axios.put(`${url}/orders/${id}`, data, {
+        headers: {
+          Authorization: token
+        }
+      });
+      return response; 
+    } else {
+      return { success: false, message: "Une erreur est survenue" };
+    }
+  } catch (error) {
+    if (error.response && error.response.data) {
+        return error.response.data;
       }
+      return { success: false, message: "Une erreur est survenue" };
+  }
+};
 
-      const response = await axios.put(`${url}/employees/${id}`, data, {
+export const validateDelivery = async (id) => {
+  const token = localStorage.getItem('token');
+  try {
+    if (token) {
+      const data = {};
+      const response = await axios.put(`${url}/orders/${id}`, data, {
         headers: {
           Authorization: token
         }

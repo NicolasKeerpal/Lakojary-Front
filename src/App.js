@@ -31,10 +31,12 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="app_container">
-        <Navbar/>
-        <Routes/>
-        <Footer/>
+      <div className="app_container bg-custom-primary_color flex flex-col min-h-screen">
+        <Navbar />
+        <div className="flex-grow">
+          <Routes />
+        </div>
+        <Footer />
       </div>
     </BrowserRouter>
   );
