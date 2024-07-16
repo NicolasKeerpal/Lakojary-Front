@@ -1,5 +1,5 @@
 import React from 'react';
-import { getCustomer } from '../services/CustomerService';
+import { getCustomer, delCustomer } from '../services/CustomerService';
 import { getEmployee } from '../services/EmployeeService';
 import { getDepartments } from '../services/DepartmentService';
 import { jwtDecode } from 'jwt-decode';
@@ -24,35 +24,41 @@ class Profile extends React.Component {
     this.logout = this.logout.bind(this);
   }
 
-  async componentDidMount() {
-    const token = localStorage.getItem('token');
-    let decoded;
-
-    if (token) {
+    async componentDidMount() {
+      const token = localStorage.getItem('token');
+      let decoded;
+      if (token) {
+        try {
+          decoded = jwtDecode(token);
+          console.log(decoded.id);
+          this.setState({ role: decoded.role });
+        } catch (error) {
+          alert("Une erreur est survenue");
+          this.props.navigate('/home');
+        }
+      }
+  
       try {
-        decoded = jwtDecode(token);
-        this.setState({ role: decoded.role });
-
-        let userData;
-        if (decoded.role === 'client') {
-          userData = await getCustomer(decoded.id);
-          if (userData.success) {
-            this.setState({
-              firstname: userData.data.customerId.firstname,
-              lastname: userData.data.customerId.lastname,
-              mail: userData.data.customerId.mail,
-              address: userData.data.address,
-              town: userData.data.town,
-              zipCode: userData.data.zipCode,
-            });
-          }
-        } else {
-          const departmentsData = await getDepartments();
-          if (departmentsData.success) {
-            this.setState({ departments: departmentsData.data });
+          let userData, firstname, lastname, mail, address, town, zipCode, salary, endContract, departmentId;
+          if (decoded.role == 'client') {
+            userData = await getCustomer(decoded.id);
+            firstname = userData.data.customerId.firstname;
+            lastname = userData.data.customerId.lastname;
+            mail = userData.data.customerId.mail;
+            address = userData.data.address;
+            town = userData.data.town;
+            zipCode = userData.data.zipCode;
           } else {
-            alert('Une erreur est survenue');
-          }
+            try {
+              const departmentsData = await getDepartments();
+              if (departmentsData.success) {
+                this.setState({ departments: departmentsData.data });
+              } else {
+                alert('Une erreur est survenue');
+              }
+            } catch (error) {
+              alert('Une erreur est survenue');
+            }
 
           userData = await getEmployee(decoded.id);
           if (userData.success) {
@@ -81,39 +87,51 @@ class Profile extends React.Component {
     return `${day}/${month}/${year}`;
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    this.props.navigate('/connexion');
-    window.location.reload();
-  }
+    logout = () => {
+      localStorage.removeItem('token');
+      this.props.navigate('/connexion');
+      window.location.reload();
+    }
+  
+    async deleteProfile(event) {
+      event.preventDefault();
+      const token = localStorage.getItem('token');
+      let decoded;
+      if (token) {
+        try {
+          decoded = jwtDecode(token);
+          console.log(decoded.id);
+          this.setState({ role: decoded.role });
+        } catch (error) {
+          alert("Une erreur est survenue");
+          this.props.navigate('/home');
+        }
+      }
 
-  render() {
-    const {
-      firstname,
-      lastname,
-      mail,
-      role,
-      endContract,
-      salary,
-      town,
-      address,
-      zipCode,
-      departments,
-      departmentId,
-    } = this.state;
+      try {
+        const response = await delCustomer(decoded.id);
+        
+        if (response.status == 204) {
+          alert("Votre profil a bien été supprimé !");
+          this.logout();
+        } else {
+          alert(response.message);
+        }
+      } catch (error) {
+        alert("Une erreur est survenue");
+      }
+    }
 
-    let roleContent = role === 'client' ? 'Client' : `Employé - ${role}`;
-    let infoContent = (
-      <div className="bg-custom-primary_color rounded-lg p-4 mb-4">
-        <h1 className="text-2xl text-white">{firstname} {lastname}</h1>
-        <p className="text-white">{roleContent}</p>
-        <div className="mt-4">
-          <div className="flex space-x-4">
-            <div className="flex-1">
-              <p className="text-white font-semibold">Mail</p>
-              <div className="border-4 border-custom-secondary_color bg-transparent text-white p-2 rounded">
-                <p>{mail}</p>
-              </div>
+    render() {
+      const { firstname, lastname, mail, role, endContract, salary, town, address, zipCode, departments, departmentId } = this.state;
+      let roleContent = "Client";
+      let infoContent = ( <div>
+        <div>
+            <div>
+                <p>Mail</p>
+                <div>
+                    <p>{mail}</p>
+                </div>
             </div>
             <div className="flex-1">
               <p className="text-white font-semibold">Adresse</p>
@@ -138,21 +156,23 @@ class Profile extends React.Component {
           </div>
         </div>
       </div>
-    );
+      </div> );
+      let buttons = ( <div>
+              <Link to={'/profil/edit'}><button>Modifier</button></Link>
+              <button onClick={(event) => this.deleteProfile(event)}>Supprimer</button>
+              <button onClick={this.logout}>Déconnexion</button>
+      </div>);
 
-    if (role !== 'client') {
-      const department = departments[departmentId - 1];
-      infoContent = (
-        <div className="bg-custom-primary_color rounded-lg p-4 mb-4">
-          <h1 className="text-2xl text-white">{firstname} {lastname}</h1>
-          <p className="text-white">Employé - {role}</p>
-          <div className="mt-4">
-            <div className="flex space-x-4">
-              <div className="flex-1">
-                <p className="text-white font-semibold">Mail</p>
-                <div className="border-4 border-custom-secondary_color bg-transparent text-white p-2 rounded">
-                  <p>{mail}</p>
-                </div>
+      if (role!="client") {
+        let department = departments[departmentId-1];
+        roleContent = "Employé - " + role;
+        infoContent = ( <div>
+          <div>
+              <div>
+                  <p>Mail</p>
+                  <div>
+                      <p>{mail}</p>
+                  </div>
               </div>
               <div className="flex-1">
                 <p className="text-white font-semibold">Département</p>

@@ -52,6 +52,17 @@ class UpdateProfile extends React.Component {
 
     try {
         let userData, firstname, lastname, mail, address, town, zipCode, salary, endContract, departmentId, firstDayWeekend;
+        try {
+          const departmentsData = await getDepartments();
+          if (departmentsData.success) {
+            this.setState({ departments: departmentsData.data });
+          } else {
+            alert('Une erreur est survenue');
+          }
+        } catch (error) {
+          alert('Une erreur est survenue');
+        }
+        
         if (decoded.role == 'client') {
           userData = await getCustomer(decoded.id);
           firstname = userData.data.customerId.firstname;
@@ -60,18 +71,8 @@ class UpdateProfile extends React.Component {
           address = userData.data.address;
           town = userData.data.town;
           zipCode = userData.data.zipCode;
+          departmentId = userData.data.departmentId;
         } else {
-          try {
-            const departmentsData = await getDepartments();
-            if (departmentsData.success) {
-              this.setState({ departments: departmentsData.data });
-            } else {
-              alert('Une erreur est survenue');
-            }
-          } catch (error) {
-            alert('Une erreur est survenue');
-          }
-
           const weekend = await getWeekend(this.state.id);
           userData = await getEmployee(decoded.id);
           firstname = userData.data.employeeId.firstname;
@@ -148,81 +149,63 @@ class UpdateProfile extends React.Component {
   
   render() {
     const { role } = this.state;
-    let infoContent = ( <div>
-        <label>
-            Nom:
-            <input
-              type="text"
-              name="lastname"
-              value={this.state.formData.lastname}
-              onChange={this.handleChange}
-              required
-            />
-          </label>
-          <br />
-        <label>
-            Prénom:
-            <input
-              type="text"
-              name="firstname"
-              value={this.state.formData.firstname}
-              onChange={this.handleChange}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Adresse:
-            <input
-              type="text"
-              name="address"
-              value={this.state.formData.address}
-              onChange={this.handleChange}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Code postal:
-            <input
-              type="number"
-              name="zipCode"
-              value={this.state.formData.zipCode}
-              onChange={this.handleChange}
-              min="1000"
-              max="98999"
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Ville:
-            <input
-              type="text"
-              name="town"
-              value={this.state.formData.town}
-              onChange={this.handleChange}
-              required
-            />
-          </label>
-          <br />
-          <label>
-            Département:
-            <select
-              name="departmentId"
-              value={this.state.formData.departmentId}
-              onChange={this.handleChange}>
-              {this.state.departments.map(department => (
-                <option key={department.id} value={department.id}>
-                  {String(department.id).padStart(2, '0')} - {department.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <br />
-    </div> );
+    let infoContent;
 
-    if (role!="client") {
+    if (role=="client") {
+      infoContent = ( <div>
+            <label>
+              Adresse:
+              <input
+                type="text"
+                name="address"
+                value={this.state.formData.address}
+                onChange={this.handleChange}
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Code postal:
+              <input
+                type="number"
+                name="zipCode"
+                value={this.state.formData.zipCode}
+                onChange={this.handleChange}
+                min="1000"
+                max="98999"
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Ville:
+              <input
+                type="text"
+                name="town"
+                value={this.state.formData.town}
+                onChange={this.handleChange}
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Département:
+              <select
+                name="departmentId"
+                value={this.state.formData.departmentId}
+                onChange={this.handleChange}>
+                {this.state.departments.map(department => (
+                  <option key={department.id} value={department.id}>
+                    {String(department.id).padStart(2, '0')} - {department.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <br />
+      </div> );
+    }
+
+    if (role=="admin") {
       infoContent = ( <div>
         <label>
             Nom:
