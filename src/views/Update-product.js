@@ -134,16 +134,22 @@ class UpdateProduct extends React.Component {
   render() {
     let { composition, ingredients } = this.state;
     let compositionContent = (
-      <p>Aucun ingrédients (veuillez en sélectionner au moins un)</p>
+      <p className='text-white'>Aucun ingrédients (veuillez en sélectionner au moins un)</p>
     );
 
     if (composition.length > 0) {
       compositionContent = (
         <div className="mb-4">
           {composition.map(ingredient => (
-            <div key={ingredient.id} className="flex items-center">
-              <span className="mr-2">{ingredient.name}</span>
-              <button type="button" onClick={() => this.delComposition(ingredient.id)} className="bg-red-500 text-white rounded px-2 py-1">-</button>
+            <div key={ingredient.id} className="flex items-center mb-2">
+              <span className="mr-2 text-white">{ingredient.name}</span>
+              <button 
+                type="button" 
+                onClick={() => this.delComposition(ingredient.id)} 
+                className="ml-auto bg-custom-primary_color text-white rounded px-2 hover:bg-custom-hover_effect"
+              >
+                -
+              </button>
             </div>
           ))}
         </div>
@@ -151,7 +157,7 @@ class UpdateProduct extends React.Component {
     }
 
     return (
-      <div className="container mx-auto p-6">
+      <div className="container mx-auto p-6 w-[50rem]">
         <form onSubmit={this.submit} className="bg-custom-secondary_color rounded-lg shadow-md p-6">
           <h1 className="text-2xl font-bold mb-4 text-white">Modification d'un produit</h1>
           <label className="block mb-2 text-white">
@@ -236,15 +242,15 @@ class UpdateProduct extends React.Component {
                 </option>
               ))}
             </select>
-            <button type="button" onClick={this.addComposition} className="mt-2 bg-blue-500 text-white rounded px-3 py-1">Ajouter</button>
+            <button type="button" onClick={this.addComposition} className="mt-4 ml-4 bg-custom-primary_color text-white hover:text-white hover:bg-custom-hover_effect text-xl rounded-[0.5rem] px-[1rem] py-[0.5rem]">Ajouter</button>
           </div>
           <div className="mb-4">
             <span className="block mb-2 text-white">Liste des ingrédients dans la composition :</span>
             {compositionContent}
           </div>
-          <button type="submit" className="w-full bg-green-500 text-white rounded px-4 py-2">Modifier</button>
+          <button type="submit" className="w-full ml-4 bg-custom-primary_color text-white hover:text-white hover:bg-custom-hover_effect text-xl rounded-[0.5rem] px-[1rem] py-[0.5rem]">Modifier</button>
           <Link to={`/nos-produits/${this.props.id}`}>
-            <button type="button" className="w-full mt-2 bg-gray-300 text-black rounded px-4 py-2">Retour</button>
+            <button type="button" className="mt-4 w-full ml-4 bg-custom-primary_color text-white hover:text-white hover:bg-custom-hover_effect text-xl rounded-[0.5rem] px-[1rem] py-[0.5rem]">Retour</button>
           </Link>
         </form>
       </div>

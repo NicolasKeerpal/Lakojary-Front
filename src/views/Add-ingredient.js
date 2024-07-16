@@ -7,13 +7,13 @@ class AddIngredient extends React.Component {
     super(props);
     this.state = {
       formData: {
-          name: '',
-          stock: 0
+        name: '',
+        stock: 0
       }
     };
 
-      this.handleChange = this.handleChange.bind(this);
-      this.submit = this.submit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   handleChange(event) {
@@ -33,7 +33,7 @@ class AddIngredient extends React.Component {
       const response = await addIngredient(name, stock);
       
       if (response.success) {
-        alert("Cet ingrédient a bien été crée !");
+        alert("Cet ingrédient a bien été créé !");
         this.props.navigate('/ingredients');
       } else {
         alert(response.message);
@@ -45,22 +45,22 @@ class AddIngredient extends React.Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.submit}>
-        <h1>Ajout d'un ingrédient</h1>
-        <label>
-            Nom:
+      <div className="flex flex-col items-center mt-8">
+        <form onSubmit={this.submit} className="w-full max-w-lg bg-custom-secondary_color p-6 rounded-lg shadow-lg">
+          <h1 className="text-2xl font-bold mb-4 text-white">Ajout d'un ingrédient</h1>
+          <div className="mb-4">
+            <label className="block font-medium text-white">Nom:</label>
             <input
               type="text"
               name="name"
               value={this.state.formData.name}
               onChange={this.handleChange}
               required
+              className="w-full p-2 border border-gray-300 rounded"
             />
-          </label>
-          <br />
-          <label>
-            Stock:
+          </div>
+          <div className="mb-4">
+            <label className="block font-medium text-white">Stock:</label>
             <input
               type="number"
               name="stock"
@@ -68,11 +68,15 @@ class AddIngredient extends React.Component {
               onChange={this.handleChange}
               min="0"
               required
+              className="w-full p-2 border border-gray-300 rounded"
             />
-          </label>
-          <br />
-          <button type="submit">Créer</button>
-          <Link to="/ingredients"><button>Annuler</button></Link>
+          </div>
+          <div className="flex justify-between">
+            <button type="submit" className="px-4 py-2 bg-custom-primary_color text-white rounded hover:bg-custom-hover_effect">Créer</button>
+            <Link to="/ingredients">
+              <button type="button" className="px-4 py-2 bg-custom-primary_color text-white rounded hover:bg-custom-hover_effect">Annuler</button>
+            </Link>
+          </div>
         </form>
       </div>
     );

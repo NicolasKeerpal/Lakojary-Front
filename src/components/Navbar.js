@@ -60,7 +60,7 @@ class Navbar extends React.Component {
               <li><Link to="/" className="text-white hover:text-custom-hover_effect text-xl font-bold">Accueil</Link></li>
               <li><Link to="/nos-produits" className="text-white hover:text-custom-hover_effect text-xl font-bold">Nos produits</Link></li>
               <li><Link to="/qui-sommes-nous" className="text-white hover:text-custom-hover_effect text-xl font-bold">Qui sommes nous ?</Link></li>
-              <li><Link to="/livraisons" className="text-white hover:text-custom-hover_effect text-xl font-bold">Livraisons</Link></li>
+              <li><Link to="/mes-livraisons" className="text-white hover:text-custom-hover_effect text-xl font-bold">Livraisons</Link></li>
               <li><Link to="/profil" className="bg-custom-primary_color text-white hover:text-white hover:bg-custom-hover_effect text-xl font-bold rounded-[5rem] px-[2rem] py-[0.2rem]">Profil</Link></li>
             </>
           );
@@ -70,8 +70,8 @@ class Navbar extends React.Component {
               <li><Link to="/" className="text-white hover:text-custom-hover_effect text-xl font-bold">Accueil</Link></li>
               <li><Link to="/nos-produits" className="text-white hover:text-custom-hover_effect text-xl font-bold">Nos produits</Link></li>
               <li><Link to="/qui-sommes-nous" className="text-white hover:text-custom-hover_effect text-xl font-bold">Qui sommes nous ?</Link></li>
-              <li><Link to="/commandes" className="text-white hover:text-custom-hover_effect text-xl font-bold">Commandes</Link></li>
-              <li><Link to="/panier" className="text-white hover:text-custom-hover_effect text-xl font-bold">Panier</Link></li>
+              <li><Link to="/mes-commandes" className="text-white hover:text-custom-hover_effect text-xl font-bold">Commandes</Link></li>
+              <li><Link to="/mon-panier" className="text-white hover:text-custom-hover_effect text-xl font-bold">Panier</Link></li>
               <li><Link to="/profil" className="bg-custom-primary_color text-white hover:text-white hover:bg-custom-hover_effect text-xl font-bold rounded-[5rem] px-[2rem] py-[0.2rem]">Profil</Link></li>
             </>
           );

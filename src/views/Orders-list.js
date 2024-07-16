@@ -2,6 +2,7 @@ import React from 'react';
 import { getPaidOrders, delOrder, validateDelivery } from '../services/OrderService';
 import { getFoods } from '../services/FoodService';
 import { getDeliverymen } from '../services/EmployeeService';
+import { Link } from 'react-router-dom';
 
 class OrdersList extends React.Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class OrdersList extends React.Component {
       const foodsData = await getFoods();
       const deliverymenData = await getDeliverymen();
 
-      if (paidOrdersData.success && foodsData.success && deliverymenData) {
+      if (paidOrdersData.success && foodsData.success && deliverymenData.success) {
         this.setState({ 
           paidOrders: paidOrdersData.data,
           foods: foodsData.data,
@@ -124,58 +125,60 @@ class OrdersList extends React.Component {
     const { paidOrders, startIndex, numberDisplayed, foods, pageIndex, pageMax } = this.state;
     const displayedOrders = paidOrders.slice(startIndex, startIndex + numberDisplayed);
     const pageBtn = paidOrders.length > numberDisplayed && (
-      <div className="flex justify-between items-center mb-4">
-        <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700" onClick={this.onClickPrev}>{"<"}</button>
-        <span className="text-white">Page: {pageIndex}/{pageMax}</span>
-        <button className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700" onClick={this.onClickNext}>{">"}</button>
+      <div className="flex items-center justify-center mt-4">
+        <button className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75" onClick={this.onClickPrev}>{"<"}</button>
+        <span className="text-white text-[1.5rem] mx-2">Page : {pageIndex}/{pageMax}</span>
+        <button className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75" onClick={this.onClickNext}>{">"}</button>
       </div>
     );
 
     return (
-      <div className="container mx-auto mt-8">
-        <h1 className="text-3xl font-bold text-white mb-4">Mes commandes :</h1>
-        {paidOrders.length === 0 ? (
-          <div>
-            <p className="text-white">Aucune commande</p>
-          </div>
-        ) : (
-          <div>
-            {pageBtn}
-            <table className="w-full table-auto bg-gray-800 text-white">
-              <thead>
-                <tr className="bg-gray-900">
-                  <th className="p-2">Nom</th>
-                  <th className="p-2">Qte</th>
-                  <th className="p-2">Prix</th>
-                  <th className="p-2">Livreur</th>
-                  <th className="p-2">Date d'arrivée</th>
-                  <th className="p-2">Livré</th>
-                  <th className="p-2">Valider</th>
-                </tr>
-              </thead>
-              <tbody>
-                {displayedOrders.map(order => {
-                  const validBtn = order.validation ? (
-                    <button className="px-4 py-2 bg-green-600 text-white rounded cursor-not-allowed" disabled>Validé</button>
-                  ) : (
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={(event) => this.validDelivery(event, order.id)}>Valider</button>
-                  );
-                  return (
-                    <tr key={order.id} className="border-t border-gray-700">
-                      <td className="p-2 text-center">{foods[order.foodId - 1].name}</td>
-                      <td className="p-2 text-center">{order.qty}</td>
-                      <td className="p-2 text-center">{(foods[order.foodId - 1].price * order.qty).toFixed(2)} €</td>
-                      <td className="p-2 text-center">{this.getDeliverymanName(order.deliverymanId)}</td>
-                      <td className="p-2 text-center">{this.formatDate(order.dueDate)}</td>
-                      <td className="p-2 text-center">{order.deliveryDate ? this.formatDate(order.deliveryDate) : 'En cours...'}</td>
-                      <td className="p-2 text-center">{validBtn}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+      <div className="flex items-center justify-center mt-8 mb-10">
+        <div className="w-full">
+          <h1 className="text-3xl font-bold text-white pl-2">Mes commandes :</h1>
+          {paidOrders.length === 0 ? (
+            <div>
+              <p className="text-white">Aucune commande</p>
+            </div>
+          ) : (
+            <div>
+              {pageBtn}
+              <table className="w-full mt-4 border-collapse">
+                <thead>
+                  <tr>
+                    <th className="p-2 text-white text-[1.5rem]">Nom</th>
+                    <th className="p-2 text-white text-[1.5rem]">Qte</th>
+                    <th className="p-2 text-white text-[1.5rem]">Prix</th>
+                    <th className="p-2 text-white text-[1.5rem]">Livreur</th>
+                    <th className="p-2 text-white text-[1.5rem]">Date d'arrivée</th>
+                    <th className="p-2 text-white text-[1.5rem]">Livré</th>
+                    <th className="p-2 text-white text-[1.5rem]">Valider</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedOrders.map((order, index) => {
+                    const validBtn = order.validation ? (
+                      <button className="px-4 py-2 bg-custom-primary_color text-white rounded cursor-not-allowed" disabled>Validé</button>
+                    ) : (
+                      <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={(event) => this.validDelivery(event, order.id)}>Valider</button>
+                    );
+                    return (
+                      <tr key={order.id} className={index % 2 === 0 ? "bg-custom-secondary_color" : "bg-custom-primary_color"}>
+                        <td className="p-2 text-white text-center">{foods[order.foodId - 1].name}</td>
+                        <td className="p-2 text-white text-center">{order.qty}</td>
+                        <td className="p-2 text-white text-center">{(foods[order.foodId - 1].price * order.qty).toFixed(2)} €</td>
+                        <td className="p-2 text-white text-center">{this.getDeliverymanName(order.deliverymanId)}</td>
+                        <td className="p-2 text-white text-center">{this.formatDate(order.dueDate)}</td>
+                        <td className="p-2 text-white text-center">{order.deliveryDate ? this.formatDate(order.deliveryDate) : 'En cours...'}</td>
+                        <td className="p-2 text-white text-center">{validBtn}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
       </div>
     );
   }

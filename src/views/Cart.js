@@ -122,10 +122,10 @@ class Cart extends React.Component {
       let pageBtn = "";
       if (cart.length > numberDisplayed) {
         pageBtn = (
-          <div className="flex items-center justify-between mt-4">
-            <button onClick={this.onClickPrev} className="px-4 py-2 bg-custom-primary_color text-white rounded hover:bg-opacity-75 focus:outline-none">&lt;</button>
-            <span className="text-white">Page : {this.state.pageIndex}/{this.state.pageMax}</span>
-            <button onClick={this.onClickNext} className="px-4 py-2 bg-custom-primary_color text-white rounded hover:bg-opacity-75 focus:outline-none">&gt;</button>
+          <div className="flex items-center justify-center mt-4">
+            <button onClick={this.onClickPrev} className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75">{"<"}</button>
+            <span className="text-white text-[1.5rem] mx-2">Page : {this.state.pageIndex}/{this.state.pageMax}</span>
+            <button onClick={this.onClickNext} className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75">{">"}</button>
           </div>
         );
       }
@@ -150,10 +150,10 @@ class Cart extends React.Component {
                   <td className="p-2 text-white text-center">{order.qty}</td>
                   <td className="p-2 text-white text-center">{foods[order.foodId - 1].price * order.qty} €</td>
                   <td className="p-2 text-white text-center">
-                    <button onClick={(event) => this.openBuyDialog(event, order.id, foods[order.foodId - 1].name, foods[order.foodId - 1].price)} className="px-4 py-2 bg-[#533619] text-white rounded hover:bg-opacity-75 focus:outline-none">Acheter</button>
+                    <button onClick={(event) => this.openBuyDialog(event, order.id, foods[order.foodId - 1].name, foods[order.foodId - 1].price)} className="ml-2 px-4 py-2 bg-custom-hover_effect text-white rounded hover:bg-custom-primary_color">Acheter</button>
                   </td>
                   <td className="p-2 text-white text-center">
-                    <button onClick={(event) => this.deleteOrder(event, order.id)} className="px-4 py-2 bg-[#533619] text-white rounded hover:bg-opacity-75 focus:outline-none">Supprimer</button>
+                    <button onClick={(event) => this.deleteOrder(event, order.id)} className="ml-2 px-4 py-2 bg-custom-hover_effect text-white rounded hover:bg-custom-primary_color">Supprimer</button>
                   </td>
                 </tr>
               ))}
