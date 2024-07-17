@@ -51,12 +51,12 @@ class BuyDialog extends React.Component {
 
   render() {
     return (
-      <div className="flex items-center justify-center mt-[3rem] mb-[3rem]">
-        <div className="bg-[#533619] rounded-lg p-6 w-[40rem]">
-          <h1 className="text-2xl font-bold pt-4 pb-2 text-center text-white">Purchase</h1>
+      <div className="flex items-center justify-center mt-[3rem] mb-[3rem] z-20 fixed inset-0 bg-black bg-opacity-50">
+        <div className="bg-[#533619] rounded-lg p-6 w-[40rem] relative">
+          <h1 className="text-2xl font-bold pt-4 pb-2 text-center text-white">Achat</h1>
           <form onSubmit={this.submit} className="max-w-sm mx-auto">
             <div className="mb-4">
-              <label htmlFor="hour" className="block mb-1 text-white">Delivery hour wanted (*):</label>
+              <label htmlFor="hour" className="block mb-1 text-white">Heure de livraison souhaitée (*):</label>
               <input
                 type="text"
                 id="hour"
@@ -66,11 +66,9 @@ class BuyDialog extends React.Component {
                 required
                 className="w-full px-3 py-2 bg-white text-black rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
               />
-              {/* Error handling can be added here if needed */}
             </div>
-
             <div className="mb-4">
-              <label htmlFor="number" className="block mb-1 text-white">Number on card (*):</label>
+              <label htmlFor="number" className="block mb-1 text-white">Numéro sur la carte (*):</label>
               <input
                 type="text"
                 id="number"
@@ -80,11 +78,9 @@ class BuyDialog extends React.Component {
                 required
                 className="w-full px-3 py-2 bg-white text-black rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
               />
-              {/* Error handling can be added here if needed */}
             </div>
-
             <div className="mb-4">
-              <label htmlFor="name" className="block mb-1 text-white">Name on card (*):</label>
+              <label htmlFor="name" className="block mb-1 text-white">Nom sur la carte (*):</label>
               <input
                 type="text"
                 id="name"
@@ -94,18 +90,16 @@ class BuyDialog extends React.Component {
                 required
                 className="w-full px-3 py-2 bg-white text-black rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
               />
-              {/* Error handling can be added here if needed */}
             </div>
-
             <button
               type="submit"
-              className="w-full mt-4 bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline mb-[2rem]"
+              className="w-full mt-4 bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline mb-[1rem]"
             >
-              Buy
+              Acheter
             </button>
             <button
               onClick={this.handleClose}
-              className="w-full mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline mb-[2rem]"
+              className="w-full mt-1 bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline mb-[2rem]"
             >
               Annuler
             </button>

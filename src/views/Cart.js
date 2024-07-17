@@ -22,6 +22,7 @@ class Cart extends React.Component {
     this.onClickNext = this.onClickNext.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.closeBuyDialog = this.closeBuyDialog.bind(this);
+    this.openBuyDialog = this.openBuyDialog.bind(this);
   }
 
   async componentDidMount() {
@@ -92,7 +93,7 @@ class Cart extends React.Component {
     }
   }
 
-  async openBuyDialog(event, orderId, foodName, foodPrice) {
+  openBuyDialog(event, orderId, foodName, foodPrice) {
     event.preventDefault();
     this.setState({ 
       payementId: orderId,
@@ -133,7 +134,7 @@ class Cart extends React.Component {
       content = (
         <div>
           {pageBtn}
-          <table className="w-full mt-4 border-collapse">
+          <table className="w-full mt-4 border-collapse z-10">
             <thead>
               <tr>
                 <th className="p-2 text-white">Nom</th>

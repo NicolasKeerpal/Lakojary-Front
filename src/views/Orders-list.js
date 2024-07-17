@@ -160,7 +160,7 @@ class OrdersList extends React.Component {
                     const validBtn = order.validation ? (
                       <button className="px-4 py-2 bg-custom-primary_color text-white rounded cursor-not-allowed" disabled>Validé</button>
                     ) : (
-                      <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700" onClick={(event) => this.validDelivery(event, order.id)}>Valider</button>
+                      <button className="px-4 py-2 bg-custom-hover_effect text-white rounded hover:bg-custom-primary_color" onClick={(event) => this.validDelivery(event, order.id)}>Valider</button>
                     );
                     return (
                       <tr key={order.id} className={index % 2 === 0 ? "bg-custom-secondary_color" : "bg-custom-primary_color"}>
