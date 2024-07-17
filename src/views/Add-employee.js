@@ -144,7 +144,6 @@ class AddEmployee extends React.Component {
               className="block w-full mt-1 p-2 border rounded">
               <option value={1}>Admin</option>
               <option value={2}>Livreur</option>
-              <option value={3}>Boulanger</option>
             </select>
           </label>
           <label className="block mb-4">

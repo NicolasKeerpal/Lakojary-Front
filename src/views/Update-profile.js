@@ -303,7 +303,7 @@ class UpdateProfile extends React.Component {
               onChange={this.handleCheckboxChange}
               className="mr-2"
             />
-            Mot de passe:
+            Nouveau mot de passe:
             <input
               type="password"
               name="password"

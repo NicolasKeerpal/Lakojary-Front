@@ -132,7 +132,7 @@ class UpdateCustomer extends React.Component {
               onChange={this.handleCheckboxChange}
               className="mr-2"
             />
-            <span className="text-white">Mot de passe:</span>
+            <span className="text-white">Nouveau mot de passe:</span>
             <input
               type="password"
               name="password"
