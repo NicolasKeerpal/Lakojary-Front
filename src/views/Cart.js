@@ -22,6 +22,7 @@ class Cart extends React.Component {
     this.onClickNext = this.onClickNext.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.closeBuyDialog = this.closeBuyDialog.bind(this);
+    this.openBuyDialog = this.openBuyDialog.bind(this);
   }
 
   async componentDidMount() {
@@ -34,8 +35,8 @@ class Cart extends React.Component {
           foods: foodsData.data,
           cart: cartData.data
         });
-        const max = Math.ceil(this.state.cart.length/this.state.numberDisplayed);
-        this.setState({ pageMax : max });
+        const max = Math.ceil(this.state.cart.length / this.state.numberDisplayed);
+        this.setState({ pageMax: max });
       }
     } catch (error) {
       alert('Une erreur est survenue');
@@ -50,11 +51,10 @@ class Cart extends React.Component {
         startIndex: 0,
         pageIndex: 1 
       });
-    }
-    else {
+    } else {
       this.setState({ 
         startIndex: index,
-        pageIndex : page
+        pageIndex: page
       });
     }
   }
@@ -66,14 +66,13 @@ class Cart extends React.Component {
       let max = this.state.pageMax;
       this.setState({ 
         startIndex: index,
-        pageIndex : max
+        pageIndex: max
       });
-    }
-    else {
+    } else {
       const page = this.state.pageIndex - 1;
       this.setState({ 
         startIndex: index,
-        pageIndex : page
+        pageIndex: page
       });
     }
   }
@@ -83,7 +82,7 @@ class Cart extends React.Component {
     try {
       const response = await delOrder(id);
       
-      if (response.status == 204) {
+      if (response.status === 204) {
         alert("Cet article a bien été supprimé !");
         window.location.reload();
       } else {
@@ -94,7 +93,7 @@ class Cart extends React.Component {
     }
   }
 
-  async openBuyDialog(event, orderId, foodName, foodPrice) {
+  openBuyDialog(event, orderId, foodName, foodPrice) {
     event.preventDefault();
     this.setState({ 
       payementId: orderId,
@@ -112,10 +111,10 @@ class Cart extends React.Component {
     let { cart, foods, purchasedFoodName, purchasedFoodPrice, payementId } = this.state;
     let content;
 
-    if (cart.length == 0) {
+    if (cart.length === 0) {
       content = (
         <div>
-          <p>Aucun produit ajouté</p>
+          <p className="text-white mt-4">Vous n'avez rien ajouté à votre panier.</p>
         </div>
       );
     } else {
@@ -124,10 +123,10 @@ class Cart extends React.Component {
       let pageBtn = "";
       if (cart.length > numberDisplayed) {
         pageBtn = (
-          <div>
-            <button onClick={this.onClickPrev}>{"<"}</button> 
-            Page : {this.state.pageIndex}/{this.state.pageMax} 
-            <button onClick={this.onClickNext}>{">"}</button>
+          <div className="flex items-center justify-center mt-4">
+            <button onClick={this.onClickPrev} className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75">{"<"}</button>
+            <span className="text-white text-[1.5rem] mx-2">Page : {this.state.pageIndex}/{this.state.pageMax}</span>
+            <button onClick={this.onClickNext} className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75">{">"}</button>
           </div>
         );
       }
@@ -135,37 +134,44 @@ class Cart extends React.Component {
       content = (
         <div>
           {pageBtn}
-          <table>
-            <tr>
-              <th>Nom</th>
-              <th>Qte</th>
-              <th>Prix</th>
-              <th>Acheter</th>
-              <th>Supprimer</th>
-            </tr>
-
-            {displayedOrders.map(order => (
-                <tr key={order.id}>
-                  <td>{foods[order.foodId - 1].name}</td>
-                  <td>{order.qty}</td>
-                  <td>{foods[order.foodId - 1].price * order.qty} €</td>
-                  <td><button onClick={(event) => this.openBuyDialog(event, order.id, foods[order.foodId - 1].name, foods[order.foodId - 1].price)}>Acheter</button></td>
-                  <td><button onClick={(event) => this.deleteOrder(event, order.id)}>Supprimer</button></td>
+          <table className="w-full mt-4 border-collapse z-10">
+            <thead>
+              <tr>
+                <th className="p-2 text-white">Nom</th>
+                <th className="p-2 text-white">Qte</th>
+                <th className="p-2 text-white">Prix</th>
+                <th className="p-2 text-white">Acheter</th>
+                <th className="p-2 text-white">Supprimer</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayedOrders.map((order, index) => (
+                <tr key={order.id} className={index % 2 === 0 ? 'bg-custom-secondary_color' : 'bg-custom-primary'}>
+                  <td className="p-2 text-white text-center">{foods[order.foodId - 1].name}</td>
+                  <td className="p-2 text-white text-center">{order.qty}</td>
+                  <td className="p-2 text-white text-center">{foods[order.foodId - 1].price * order.qty} €</td>
+                  <td className="p-2 text-white text-center">
+                    <button onClick={(event) => this.openBuyDialog(event, order.id, foods[order.foodId - 1].name, foods[order.foodId - 1].price)} className="ml-2 px-4 py-2 bg-custom-hover_effect text-white rounded hover:bg-custom-primary_color">Acheter</button>
+                  </td>
+                  <td className="p-2 text-white text-center">
+                    <button onClick={(event) => this.deleteOrder(event, order.id)} className="ml-2 px-4 py-2 bg-custom-hover_effect text-white rounded hover:bg-custom-primary_color">Supprimer</button>
+                  </td>
                 </tr>
               ))}
+            </tbody>
           </table>
         </div>
       );
     }
 
     return (
-      <div>
-      {this.state.showBuyDialog && <BuyDialog orderId={payementId} foodName={purchasedFoodName} foodPrice={purchasedFoodPrice} onClose={this.closeBuyDialog} navigate={this.props.navigate}/>}
-
-      <h1>Mon panier</h1>
-      <br/>
-      {content}
-    </div>
+      <div className="flex items-center justify-center mt-8 mb-2">
+        <div className="w-full">
+          <h1 className="text-3xl font-bold text-white pl-2">Mon panier :</h1>
+          {this.state.showBuyDialog && <BuyDialog orderId={payementId} foodName={purchasedFoodName} foodPrice={purchasedFoodPrice} onClose={this.closeBuyDialog} navigate={this.props.navigate} />}
+          {content}
+        </div>
+      </div>
     );
   }
 }

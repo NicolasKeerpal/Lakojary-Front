@@ -107,22 +107,22 @@ const AppRoutes = () => {
         </AuthRoute>
       }/>
       <Route path="/nos-produits/ajout" element={
-        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
           <AddProduct navigate={navigate} />
         </AuthRoute>
       }/>
       <Route path="/ingredients" element={
-        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
           <IngredientsList navigate={navigate}/>
         </AuthRoute>
       }/>
       <Route path="/ingredients/:id/edit" element={
-        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
             <WithIdFromUrl Component={UpdateIngredient} navigate={navigate} />
         </AuthRoute>
       }/>
       <Route path="/ingredients/ajout" element={
-        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
           <AddIngredient navigate={navigate}/>
         </AuthRoute>
       }/>
@@ -165,7 +165,7 @@ const AppRoutes = () => {
           <WithIdFromUrl Component={Product} navigate={navigate} />
       }/>
       <Route path="/nos-produits/:id/edit" element={
-        <AuthRoute allowedRoles={['admin', 'boulanger']} navigate={navigate}>
+        <AuthRoute allowedRoles={['admin']} navigate={navigate}>
           <WithIdFromUrl Component={UpdateProduct} navigate={navigate} />
         </AuthRoute>
       }/>

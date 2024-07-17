@@ -6,16 +6,16 @@ class UpdateVacations extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        vacationsId: props.vacationsId,
-        id: props.id,
-        formData: {
-            beginDate: null,
-            endDate: null
-        }
+      vacationsId: props.vacationsId,
+      id: props.id,
+      formData: {
+        beginDate: null,
+        endDate: null
+      }
     };
 
-      this.handleChange = this.handleChange.bind(this);
-      this.submit = this.submit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   formatDate(dateStr) {
@@ -37,8 +37,8 @@ class UpdateVacations extends React.Component {
       if (vacationsData.success) {
         let beginDate = this.formatDate(vacationsData.data.beginDate);
         let endDate = this.formatDate(vacationsData.data.endDate);
-        this.setState({ 
-          formData: { 
+        this.setState({
+          formData: {
             beginDate,
             endDate
           }
@@ -67,7 +67,7 @@ class UpdateVacations extends React.Component {
     const { vacationsId, id } = this.state;
     try {
       const response = await putVacations(id, vacationsId, beginDate, endDate);
-      
+
       if (response.status == 204) {
         alert("Les vacances ont bien été modifiées !");
         this.props.navigate(`/employes/${id}/vacances`);
@@ -82,33 +82,37 @@ class UpdateVacations extends React.Component {
   render() {
     const { id } = this.state;
     return (
-      <div>
-        <form onSubmit={this.submit}>
-        <h1>Modification de vacances</h1>
-        <label>
-            Début:
+      <div className="flex flex-col items-center mt-8">
+        <form onSubmit={this.submit} className="w-full max-w-lg bg-custom-primary_color p-8 rounded shadow-lg">
+          <h1 className="text-2xl font-bold text-white mb-6">Modification de vacances</h1>
+          <label className="block mb-4">
+            <span className="text-white">Début:</span>
             <input
               type="date"
               name="beginDate"
               value={this.state.formData.beginDate}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-        <label>
-            Fin:
+          <label className="block mb-6">
+            <span className="text-white">Fin:</span>
             <input
               type="date"
               name="endDate"
               value={this.state.formData.endDate}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-          <button type="submit">Modifier</button>
-          <Link to={`/employes/${id}/vacances`}><button>Annuler</button></Link>
+          <div className="flex justify-between">
+            <button type="submit" className="px-4 py-2 bg-custom-secondary_color text-white rounded hover:bg-opacity-75">Modifier</button>
+            <Link to={`/employes/${id}/vacances`}>
+              <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-500">Annuler</button>
+            </Link>
+          </div>
         </form>
       </div>
     );

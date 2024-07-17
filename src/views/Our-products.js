@@ -4,7 +4,7 @@ import FoodCard from '../components/FoodCard';
 import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 
-class Our_products extends React.Component {
+class OurProducts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,13 +14,12 @@ class Our_products extends React.Component {
       pageMax: 0,
       numberDisplayed: 16,
       searchQuery: '',
-      role: null
+      role: null,
     };
 
     this.onClickNext = this.onClickNext.bind(this);
     this.onClickPrev = this.onClickPrev.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.dividedInSubTab = this.dividedInSubTab.bind(this);
   }
 
   async componentDidMount() {
@@ -36,11 +35,11 @@ class Our_products extends React.Component {
 
     try {
       const foodsData = await getFoods();
-
       if (foodsData.success) {
-        this.setState({ foods: foodsData.data });
-        const max = Math.ceil(this.state.foods.length/this.state.numberDisplayed);
-        this.setState({ pageMax : max });
+        this.setState({ foods: foodsData.data }, () => {
+          const max = Math.ceil(this.state.foods.length / this.state.numberDisplayed);
+          this.setState({ pageMax: max });
+        });
       }
     } catch (error) {
       alert('Une erreur est survenue');
@@ -48,61 +47,36 @@ class Our_products extends React.Component {
   }
 
   onClickNext() {
-    const index = this.state.startIndex + this.state.numberDisplayed;
-    const page = this.state.pageIndex + 1; 
-    if (page > this.state.pageMax) {
-      this.setState({ 
-        startIndex: 0,
-        pageIndex: 1 
-      });
-    }
-    else {
-      this.setState({ 
-        startIndex: index,
-        pageIndex : page
-      });
+    const { startIndex, numberDisplayed, pageIndex, pageMax } = this.state;
+    const index = startIndex + numberDisplayed;
+    const page = pageIndex + 1;
+
+    if (page > pageMax) {
+      this.setState({ startIndex: 0, pageIndex: 1 });
+    } else {
+      this.setState({ startIndex: index, pageIndex: page });
     }
   }
 
   onClickPrev() {
     let index = this.state.startIndex - this.state.numberDisplayed;
+    const { pageMax } = this.state;
+
     if (index < 0) {
-      index = (this.state.pageMax - 1) * this.state.numberDisplayed;
-      let max = this.state.pageMax;
-      this.setState({ 
-        startIndex: index,
-        pageIndex : max
-      });
-    }
-    else {
-      const page = this.state.pageIndex - 1;
-      this.setState({ 
-        startIndex: index,
-        pageIndex : page
-      });
+      index = (pageMax - 1) * this.state.numberDisplayed;
+      this.setState({ startIndex: index, pageIndex: pageMax });
+    } else {
+      this.setState({ startIndex: index, pageIndex: this.state.pageIndex - 1 });
     }
   }
 
   handleSearchChange(event) {
     const value = event.target.value;
-    this.setState({ 
-      searchQuery: value,
-      startIndex: 0,
-      pageIndex: 1
-    });
+    this.setState({ searchQuery: value, startIndex: 0, pageIndex: 1 });
   }
 
-  dividedInSubTab(tab, sizeSubTab) {
-    let subTab = [];
-    for (let i = 0; i < tab.length; i += sizeSubTab) {
-      subTab.push(tab.slice(i, i + sizeSubTab));
-    }
-    return subTab;
-}
-
   render() {
-    let { foods, searchQuery, role } = this.state;
-    let content;
+    let { foods, searchQuery, role, startIndex, numberDisplayed } = this.state;
 
     if (searchQuery.trim() !== '') {
       foods = foods.filter(food =>
@@ -110,56 +84,61 @@ class Our_products extends React.Component {
       );
     }
 
-    if (foods.length == 0) {
-      content = (
-          <p>Aucun produit trouvé</p>
-      );
-    } else {
-      const { startIndex, numberDisplayed } = this.state;
-      const displayedFoods = this.dividedInSubTab(foods.slice(startIndex, startIndex + numberDisplayed), 4);
-
-      let pageBtn = "";
-      if (foods.length > numberDisplayed) {
-        pageBtn = (
-          <div>
-            <button onClick={this.onClickPrev}>{"<"}</button> 
-            Page : {this.state.pageIndex}/{this.state.pageMax} 
-            <button onClick={this.onClickNext}>{">"}</button>
-          </div>
-        );
-      }
-
-      content = (
-        <div>
-          {pageBtn}
-          <table>
-              {displayedFoods.map((subTab, index) => (
-                <tr key={index}>
-                  {subTab.map(food => (
-                        <td key={food.id}><FoodCard food={food} /></td>
-                    ))}
-                </tr>
-              ))}
-          </table>
-        </div>
-      );
-    }
-    let addBtn;
-    if (role=='admin'||role=='boulanger') {
-      addBtn = (
-        <Link to={`/nos-produits/ajout`}><button>Ajouter</button></Link>
-      );
-    }
+    const displayedFoods = foods.slice(startIndex, startIndex + numberDisplayed);
+    const totalPages = Math.ceil(foods.length / numberDisplayed);
 
     return (
-      <div>
-        <h1>Nos produits</h1>
-        Recherche <input type="search" placeholder="Rechercher un produit" value={this.state.searchValue} onChange={this.handleSearchChange}/> {addBtn}
-        <br/><br/>
-        {content}
+      <div className="ml-[2rem] mr-[2rem]">
+        <p className="text-white text-[2.5rem] font-bold pt-[2rem] pb-[1rem]">Nos produits :</p>
+
+        <div className="flex items-center mb-[2rem]">
+          <p className="text-[1.5rem] text-white">
+            Recherche 
+            <input
+              className="h-[2.5rem] border-2 border-custom-secondary_color rounded bg-transparent p-2 placeholder-custom-secondary_color focus:outline-none"
+              type="text"
+              value={this.state.searchQuery}
+              onChange={this.handleSearchChange}
+              placeholder="Search a product"
+            />
+          </p>
+          {role === 'admin' && (
+            <Link to="/nos-produits/ajout">
+              <button className="ml-4 bg-custom-secondary_color text-white hover:text-white hover:bg-custom-hover_effect text-xl rounded-[0.5rem] px-[1rem] py-[0.2rem]">
+                Ajouter
+              </button>
+            </Link>
+          )}
+        </div>
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center mt-4 font-bold">
+            <button onClick={this.onClickPrev} className="px-4 bg-custom-secondary_color text-white rounded-md mr-2 text-[2rem]">←</button>
+            <span className="text-2xl text-white">Page: {this.state.pageIndex}/{totalPages}</span>
+            <button onClick={this.onClickNext} className="px-4 bg-custom-secondary_color text-white rounded-md ml-2 text-[2rem]">→</button>
+          </div>
+        )}
+
+        <div className="flex justify-center mt-[2rem] mb-[4rem]">
+          <div className="text-center">
+            <div className="mt-[2rem] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-[4rem]">
+              {displayedFoods.map(food => (
+                <FoodCard key={food.id} food={food} />
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center mt-4 font-bold mb-[2rem]">
+            <button onClick={this.onClickPrev} className="px-4 bg-custom-secondary_color text-white rounded-md mr-2 text-[2rem]">←</button>
+            <span className="text-2xl text-white">Page: {this.state.pageIndex}/{totalPages}</span>
+            <button onClick={this.onClickNext} className="px-4 bg-custom-secondary_color text-white rounded-md ml-2 text-[2rem]">→</button>
+          </div>
+        )}
       </div>
     );
   }
 }
 
-export default Our_products;
+export default OurProducts;

@@ -11,20 +11,20 @@ class UpdateCustomer extends React.Component {
       isPasswordEnabled: false,
       id: props.id,
       formData: {
-          mail: '',
-          password: '',
-          firstname: '',
-          lastname: '',
-          zipCode: '',
-          address: '',
-          town: '',
-          departmentId: '1'
+        mail: '',
+        password: '',
+        firstname: '',
+        lastname: '',
+        zipCode: '',
+        address: '',
+        town: '',
+        departmentId: '1'
       }
     };
 
-      this.handleChange = this.handleChange.bind(this);
-      this.submit = this.submit.bind(this);
-      this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submit = this.submit.bind(this);
+    this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
   }
 
   async componentDidMount() {
@@ -32,9 +32,9 @@ class UpdateCustomer extends React.Component {
       const departmentsData = await getDepartments();
       const customerData = await getCustomer(this.state.id);
       if (departmentsData.success && customerData.success) {
-        this.setState({ 
+        this.setState({
           departments: departmentsData.data,
-          formData: { 
+          formData: {
             mail: customerData.data.customerId.mail,
             password: '',
             firstname: customerData.data.customerId.firstname,
@@ -75,7 +75,7 @@ class UpdateCustomer extends React.Component {
     const { mail, password, firstname, lastname, zipCode, address, town, departmentId } = this.state.formData;
     try {
       const response = await putCustomer(this.state.id, mail, this.state.isPasswordEnabled ? password : null, firstname, lastname, zipCode, address, town, departmentId);
-      
+
       if (response.status == 204) {
         alert("Ce client a bien été modifié !");
         this.props.navigate('/clients');
@@ -89,49 +89,50 @@ class UpdateCustomer extends React.Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.submit}>
-        <h1>Modification client</h1>
-        <label>
-            Nom:
+      <div className="flex flex-col items-center mt-8 mb-8">
+        <form onSubmit={this.submit} className="w-full max-w-lg bg-custom-secondary_color p-8 rounded shadow-lg">
+          <h1 className="text-2xl font-bold text-white mb-6">Modification client</h1>
+          <label className="block mb-4">
+            <span className="text-white">Nom:</span>
             <input
               type="text"
               name="lastname"
               value={this.state.formData.lastname}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-        <label>
-            Prénom:
+          <label className="block mb-4">
+            <span className="text-white">Prénom:</span>
             <input
               type="text"
               name="firstname"
               value={this.state.formData.firstname}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-          <label>
-            Mail:
+          <label className="block mb-4">
+            <span className="text-white">Mail:</span>
             <input
               type="email"
               name="mail"
               value={this.state.formData.mail}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-          <label>
+          <label className="block mb-4">
             <input
               type="checkbox"
               checked={this.state.isPasswordEnabled}
               onChange={this.handleCheckboxChange}
+              className="mr-2"
             />
-            Mot de passe:
+            <span className="text-white">Nouveau mot de passe:</span>
             <input
               type="password"
               name="password"
@@ -139,22 +140,22 @@ class UpdateCustomer extends React.Component {
               onChange={this.handleChange}
               disabled={!this.state.isPasswordEnabled}
               required
+              className={`text-black mt-1 block w-full p-2 border border-gray-300 rounded ${!this.state.isPasswordEnabled && 'bg-gray-200'}`}
             />
           </label>
-          <br />
-          <label>
-            Adresse:
+          <label className="block mb-4">
+            <span className="text-white">Adresse:</span>
             <input
               type="text"
               name="address"
               value={this.state.formData.address}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-          <label>
-            Code postal:
+          <label className="block mb-4">
+            <span className="text-white">Code postal:</span>
             <input
               type="number"
               name="zipCode"
@@ -163,26 +164,28 @@ class UpdateCustomer extends React.Component {
               min="1000"
               max="98999"
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-          <label>
-            Ville:
+          <label className="block mb-4">
+            <span className="text-white">Ville:</span>
             <input
               type="text"
               name="town"
               value={this.state.formData.town}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
-          <br />
-          <label>
-            Département:
+          <label className="block mb-6">
+            <span className="text-white">Département:</span>
             <select
               name="departmentId"
               value={this.state.formData.departmentId}
-              onChange={this.handleChange}>
+              onChange={this.handleChange}
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
+            >
               {this.state.departments.map(department => (
                 <option key={department.id} value={department.id}>
                   {String(department.id).padStart(2, '0')} - {department.name}
@@ -190,9 +193,12 @@ class UpdateCustomer extends React.Component {
               ))}
             </select>
           </label>
-          <br />
-          <button type="submit">Créer</button>
-          <Link to="/clients"><button>Annuler</button></Link>
+          <div className="flex justify-between">
+            <button type="submit" className="px-4 py-2 bg-custom-primary_color text-white rounded hover:bg-custom-hover_effect">Modifier</button>
+            <Link to="/clients">
+              <button className="px-4 py-2 bg-custom-primary_color text-white rounded hover:bg-custom-hover_effect">Annuler</button>
+            </Link>
+          </div>
         </form>
       </div>
     );

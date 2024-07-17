@@ -7,6 +7,14 @@
   pointer-events: none;
 }
 
+/***************** Test **********************/
+
+.test{
+  background-color: red;
+}
+
+
+/*********************************************/
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -26,6 +34,16 @@
 
 .App-link {
   color: #61dafb;
+}
+
+.app_container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.footer {
+  margin-top: auto; /* Ensures footer stays at the bottom */
 }
 
 @keyframes App-logo-spin {

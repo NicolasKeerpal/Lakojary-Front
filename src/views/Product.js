@@ -9,7 +9,7 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: require('../images/loadingFoodImage.gif'),
+      image: require('../assets/loadingFoodImage.gif'),
       name: '',
       price: 0,
       description: '',
@@ -40,29 +40,29 @@ class Product extends React.Component {
     }
 
     try {
-        const foodData = await getFood(this.props.id);
-        const ingredientsData = await getFoodComposition(this.props.id);
-        if (foodData.success) {
-            this.setState({ 
-                name: foodData.data.name,
-                price: foodData.data.price,
-                description: foodData.data.description,
-                ingredients: ingredientsData
-            });
-            try {
-                const response = await fetch(foodData.data.image);
-                if (response.ok) {
-                  this.setState({ image: foodData.data.image });
-                } else {
-                  this.setState({ image: require('../images/0.png') });
-                }
-              } catch (error) {
-                this.setState({ image: require('../images/0.png') });
-              }
+      const foodData = await getFood(this.props.id);
+      const ingredientsData = await getFoodComposition(this.props.id);
+      if (foodData.success) {
+        this.setState({ 
+          name: foodData.data.name,
+          price: foodData.data.price,
+          description: foodData.data.description,
+          ingredients: ingredientsData
+        });
+        try {
+          const response = await fetch(foodData.data.image);
+          if (response.ok) {
+            this.setState({ image: foodData.data.image });
+          } else {
+            this.setState({ image: require('../assets/0.png') });
+          }
+        } catch (error) {
+          this.setState({ image: require('../assets/0.png') });
         }
-    } catch(error) {
-        alert("Une erreur est survenue");
-        this.props.navigate('/nos-produits');
+      }
+    } catch (error) {
+      alert("Une erreur est survenue");
+      this.props.navigate('/nos-produits');
     }
   }
 
@@ -70,8 +70,7 @@ class Product extends React.Component {
     event.preventDefault();
     try {
       const response = await delFood(id);
-      
-      if (response.status == 204) {
+      if (response.status === 204) {
         alert("Ce produit a bien été supprimé !");
         this.props.navigate('/nos-produits');
       } else {
@@ -87,7 +86,6 @@ class Product extends React.Component {
     const { qtyToAdd } = this.state;
     try {
       const response = await addOrder(this.props.id, qtyToAdd);
-      
       if (response.success) {
         this.props.navigate('/mon-panier');
       } else {
@@ -99,29 +97,69 @@ class Product extends React.Component {
   }
 
   render() {
-    const { image, price, name, description, role, ingredients} = this.state;
+    const { image, price, name, description, role, ingredients } = this.state;
+
     let buttons = (
-        <div>
-            <button onClick={(event) => this.addOrder(event)}>Ajouter au panier</button> <input type='number' name="qtyToAdd" value={this.state.qtyToAdd} onChange={this.handleChange} />
-        </div>
+      <div className="mt-4">
+        <button onClick={(event) => this.addOrder(event)} className="bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded">
+          Ajouter au panier
+        </button>
+        <input
+          type='number'
+          name="qtyToAdd"
+          value={this.state.qtyToAdd}
+          onChange={this.handleChange}
+          className="ml-2 border rounded px-2"
+          min="1"
+        />
+      </div>
     );
-    if (role=="admin"||role=="boulanger") {
-        buttons = (
-          <div>
-            <Link to={`/nos-produits/${this.props.id}/edit`}><button>Modifier</button></Link> <button onClick={(event) => this.deleteFood(event, this.props.id)}>Supprimer</button>
-          </div>
-        );
+
+    if (role === "admin") {
+      buttons = (
+        <div className="mt-4">
+          <Link to={`/nos-produits/${this.props.id}/edit`}>
+            <button className="bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded mr-2">
+              Modifier
+            </button>
+          </Link>
+          <button
+            onClick={(event) => this.deleteFood(event, this.props.id)}
+            className="bg-custom-primary_color hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            Supprimer
+          </button>
+        </div>
+      );
+    }
+    if (!role) {
+      buttons = (
+        <div>
+          <p className="mt-4 text-white">
+          Il faut vous connecter pour commander : <Link to="/connexion" className="text-custom-hover_effect hover:underline">Se connecter</Link>
+          </p>
+        </div>
+      );
+    }
+    if (role === "livreur") {
+      buttons = (
+        <div>
+          <p className="mt-4 text-white">
+          Vous ne pouvez pas commander en tant qu'employé
+          </p>
+        </div>
+      );
     }
 
     let composition = (
-      <div>
+      <div className="mt-4 text-white">
         <strong>Composition :</strong>
         <p>Aucun ingrédients</p>
       </div>
     );
-    if (ingredients.length!=0) {
+
+    if (ingredients.length !== 0) {
       composition = (
-        <div>
+        <div className="mt-4 text-white">
           <strong>Composition :</strong>
           <ul>
             {ingredients.map(ingredient => (
@@ -131,21 +169,20 @@ class Product extends React.Component {
         </div>
       );
     }
+
     return (
-      <div>
-        <table cellPadding={30}>
-            <tr>
-                <td><img src={image} alt="image" /></td>
-                <td>
-                    <h1>{name}</h1>
-                    <p>Prix : <strong>{price} €</strong></p>
-                    <strong><p>Description :</p></strong>
-                    <p>{description}</p>
-                    <p>{composition}</p>
-                    {buttons}
-                </td>
-            </tr>
-        </table>
+      <div className="w-[80rem] mx-auto mt-8 p-6 bg-custom-secondary_color shadow-md rounded-lg flex">
+        <div className="w-[30rem]">
+          <img src={image} alt={name} className="w-full h-auto rounded" />
+        </div>
+        <div className="ml-[5rem] flex-1">
+          <h1 className="text-[3rem] font-bold mb-4 text-center text-white">{name}</h1>
+          <p className="text-[1.2rem] text-white">Prix : <strong>{price} €</strong></p>
+          <strong><p className="mt-[0.5rem] text-[1.2rem] text-white">Description :</p></strong>
+          <p className="text-white">{description}</p>
+          {composition}
+          {buttons}
+        </div>
       </div>
     );
   }

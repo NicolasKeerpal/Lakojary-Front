@@ -9,13 +9,13 @@ class UpdateIngredient extends React.Component {
       stock: 0,
       id: props.id,
       formData: {
-          name: '',
-          addStock: 0
+        name: '',
+        addStock: 0
       }
     };
 
-      this.handleChange = this.handleChange.bind(this);
-      this.submit = this.submit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.submit = this.submit.bind(this);
   }
 
   async componentDidMount() {
@@ -53,7 +53,7 @@ class UpdateIngredient extends React.Component {
     try {
       const response = await putIngredient(this.state.id, name, addStock);
       
-      if (response.status == 204) {
+      if (response.status === 204) {
         alert("Cet ingrédient a bien été modifié !");
         this.props.navigate('/ingredients');
       } else {
@@ -66,10 +66,10 @@ class UpdateIngredient extends React.Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={this.submit}>
-        <h1>Modification ingrédient</h1>
-        <label>
+      <div className="container mx-auto p-6 w-[40rem]">
+        <form onSubmit={this.submit} className="bg-custom-secondary_color rounded-lg shadow-md p-6">
+          <h1 className="text-2xl font-bold mb-4 text-white">Modification ingrédient</h1>
+          <label className="block mb-2 text-white">
             Nom:
             <input
               type="text"
@@ -77,10 +77,10 @@ class UpdateIngredient extends React.Component {
               value={this.state.formData.name}
               onChange={this.handleChange}
               required
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
-          <br />
-          <label>
+          <label className="block mb-2 text-white">
             Stock à ajouter (actuel : {this.state.stock}):
             <input
               type="number"
@@ -89,11 +89,14 @@ class UpdateIngredient extends React.Component {
               onChange={this.handleChange}
               min="0"
               required
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
-          <br />
-          <button type="submit">Modifier</button>
-          <Link to="/ingredients"><button>Annuler</button></Link>
+          
+          <button type="submit" className="mt-5 w-full bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">Modifier</button>
+          <Link to="/ingredients">
+            <button type="button" className="mt-5 w-full bg-custom-primary_color hover:bg-custom-hover_effect text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:shadow-outline">Annuler</button>
+          </Link>
         </form>
       </div>
     );
