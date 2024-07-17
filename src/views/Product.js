@@ -9,7 +9,7 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: ('../../public/assets/loadingFoodImage.gif'),
+      image: require('../assets/loadingFoodImage.gif'),
       name: '',
       price: 0,
       description: '',
