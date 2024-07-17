@@ -115,7 +115,7 @@ class Product extends React.Component {
       </div>
     );
 
-    if (role === "admin" || role === "boulanger") {
+    if (role === "admin") {
       buttons = (
         <div className="mt-4">
           <Link to={`/nos-produits/${this.props.id}/edit`}>
@@ -128,6 +128,24 @@ class Product extends React.Component {
             className="bg-custom-primary_color hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
             Supprimer
           </button>
+        </div>
+      );
+    }
+    if (!role) {
+      buttons = (
+        <div>
+          <p className="mt-4 text-white">
+          Il faut vous connecter pour commander : <Link to="/connexion" className="text-custom-hover_effect hover:underline">Se connecter</Link>
+          </p>
+        </div>
+      );
+    }
+    if (role === "livreur") {
+      buttons = (
+        <div>
+          <p className="mt-4 text-white">
+          Vous ne pouvez pas commander en tant qu'employé
+          </p>
         </div>
       );
     }
