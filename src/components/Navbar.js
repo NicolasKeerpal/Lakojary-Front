@@ -100,9 +100,7 @@ class Navbar extends React.Component {
     return (
       <header className="bg-custom-secondary_color sticky top-0 z-10">
         <nav className="container mx-auto px-10 py-4 flex items-center justify-between">
-          <a href="/" aria-label="Home">
-            <img className="w-7 h-auto p-0" src={logoImage} alt="Logo" />
-          </a>
+          <img to="/accueil" className="w-7 h-auto p-0" src={logoImage} alt="Logo" />
           <ul className="flex space-x-4">
             {getNavbar()}
           </ul>
