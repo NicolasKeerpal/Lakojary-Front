@@ -122,7 +122,7 @@ class UpdateEmployee extends React.Component {
               value={this.state.formData.lastname}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -133,7 +133,7 @@ class UpdateEmployee extends React.Component {
               value={this.state.formData.firstname}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -144,7 +144,7 @@ class UpdateEmployee extends React.Component {
               value={this.state.formData.mail}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -163,7 +163,7 @@ class UpdateEmployee extends React.Component {
               onChange={this.handleChange}
               disabled={!this.state.isPasswordEnabled}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -175,7 +175,7 @@ class UpdateEmployee extends React.Component {
               onChange={this.handleChange}
               min="0"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -194,7 +194,7 @@ class UpdateEmployee extends React.Component {
               onChange={this.handleChange}
               disabled={!this.state.isEndContractEnabled}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -203,7 +203,7 @@ class UpdateEmployee extends React.Component {
               name="departmentId"
               value={this.state.formData.departmentId}
               onChange={this.handleChange}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black block w-full px-3 py-2 border border-gray-300 rounded-md"
             >
               {this.state.departments.map(department => (
                 <option key={department.id} value={department.id}>
@@ -220,7 +220,7 @@ class UpdateEmployee extends React.Component {
               name="firstDayWeekend"
               value={this.state.formData.firstDayWeekend}
               onChange={this.handleChange}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black block w-full px-3 py-2 border border-gray-300 rounded-md"
             >
               <option value="Lundi">Lundi</option>
               <option value="Mardi">Mardi</option>

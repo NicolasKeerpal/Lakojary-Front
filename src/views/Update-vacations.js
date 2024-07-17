@@ -93,7 +93,7 @@ class UpdateVacations extends React.Component {
               value={this.state.formData.beginDate}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-6">
@@ -104,7 +104,7 @@ class UpdateVacations extends React.Component {
               value={this.state.formData.endDate}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <div className="flex justify-between">

@@ -51,8 +51,8 @@ class BuyDialog extends React.Component {
 
   render() {
     return (
-      <div className="flex items-center justify-center mt-[3rem] mb-[3rem] z-20 fixed inset-0 bg-black bg-opacity-50">
-        <div className="bg-[#533619] rounded-lg p-6 w-[40rem] relative">
+      <div className="flex items-center justify-center z-20 fixed inset-0 bg-black bg-opacity-50 w-auto h-full">
+        <div className="bg-custom-secondary_color rounded-lg p-6 w-[40rem] relative">
           <h1 className="text-2xl font-bold pt-4 pb-2 text-center text-white">Achat</h1>
           <form onSubmit={this.submit} className="max-w-sm mx-auto">
             <div className="mb-4">

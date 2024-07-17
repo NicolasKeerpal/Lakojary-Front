@@ -77,7 +77,7 @@ class UpdateIngredient extends React.Component {
               value={this.state.formData.name}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -89,7 +89,7 @@ class UpdateIngredient extends React.Component {
               onChange={this.handleChange}
               min="0"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           

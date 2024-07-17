@@ -100,7 +100,7 @@ class UpdateCustomer extends React.Component {
               value={this.state.formData.lastname}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-4">
@@ -111,7 +111,7 @@ class UpdateCustomer extends React.Component {
               value={this.state.formData.firstname}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-4">
@@ -122,7 +122,7 @@ class UpdateCustomer extends React.Component {
               value={this.state.formData.mail}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-4">
@@ -140,7 +140,7 @@ class UpdateCustomer extends React.Component {
               onChange={this.handleChange}
               disabled={!this.state.isPasswordEnabled}
               required
-              className={`mt-1 block w-full p-2 border border-gray-300 rounded ${!this.state.isPasswordEnabled && 'bg-gray-200'}`}
+              className={`text-black mt-1 block w-full p-2 border border-gray-300 rounded ${!this.state.isPasswordEnabled && 'bg-gray-200'}`}
             />
           </label>
           <label className="block mb-4">
@@ -151,7 +151,7 @@ class UpdateCustomer extends React.Component {
               value={this.state.formData.address}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-4">
@@ -164,7 +164,7 @@ class UpdateCustomer extends React.Component {
               min="1000"
               max="98999"
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-4">
@@ -175,7 +175,7 @@ class UpdateCustomer extends React.Component {
               value={this.state.formData.town}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             />
           </label>
           <label className="block mb-6">
@@ -184,7 +184,7 @@ class UpdateCustomer extends React.Component {
               name="departmentId"
               value={this.state.formData.departmentId}
               onChange={this.handleChange}
-              className="mt-1 block w-full p-2 border border-gray-300 rounded"
+              className="text-black mt-1 block w-full p-2 border border-gray-300 rounded"
             >
               {this.state.departments.map(department => (
                 <option key={department.id} value={department.id}>

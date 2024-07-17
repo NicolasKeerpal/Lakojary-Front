@@ -168,7 +168,7 @@ class UpdateProduct extends React.Component {
               value={this.state.formData.name}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -176,7 +176,7 @@ class UpdateProduct extends React.Component {
               type="checkbox"
               checked={this.state.isChangeImageEnabled}
               onChange={this.handleCheckboxChange}
-              className="mr-2"
+              className="mr-2 text-white"
             />
             Changer l'image:
             <input
@@ -187,7 +187,7 @@ class UpdateProduct extends React.Component {
               accept=".png"
               multiple={false}
               disabled={!this.state.isChangeImageEnabled}
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className=" mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -199,7 +199,7 @@ class UpdateProduct extends React.Component {
               value={this.state.formData.price}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -215,7 +215,7 @@ class UpdateProduct extends React.Component {
               onChange={this.handleChange}
               min="0"
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <label className="block mb-2 text-white">
@@ -225,7 +225,7 @@ class UpdateProduct extends React.Component {
               value={this.state.formData.description}
               onChange={this.handleChange}
               required
-              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
             />
           </label>
           <div className="mb-4">
@@ -234,7 +234,7 @@ class UpdateProduct extends React.Component {
               name="ingredients"
               value={this.state.selectedIngredientIndex}
               onChange={this.handleChangeSelectedIngredientIndex}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+              className="text-black block w-full px-3 py-2 border border-gray-300 rounded-md"
             >
               {ingredients.map((ingredient, index) => (
                 <option key={ingredient.id} value={index}>
