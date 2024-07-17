@@ -9,7 +9,7 @@ class Product extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      image: ('../../public/assets/loadingFoodImage.gif'),
+      image: require('../assets/loadingFoodImage.gif'),
       name: '',
       price: 0,
       description: '',
@@ -54,10 +54,10 @@ class Product extends React.Component {
           if (response.ok) {
             this.setState({ image: foodData.data.image });
           } else {
-            this.setState({ image: ('../../public/assets/0.png') });
+            this.setState({ image: require('../assets/0.png') });
           }
         } catch (error) {
-          this.setState({ image: ('../../public/assets/0.png') });
+          this.setState({ image: require('../assets/0.png') });
         }
       }
     } catch (error) {
